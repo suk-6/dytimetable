@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "468746601368",
+    "project_id": "dytimetable",
+    "storage_bucket": "dytimetable.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468746601368:android:902a92cdf267c9f4ec61ed",
+        "android_client_info": {
+          "package_name": "com.dukyoung.dytimetable"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2hd1jKgBPHACs9V384egHeal9sqI06rI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
