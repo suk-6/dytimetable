@@ -1,6 +1,7 @@
 import "package:flutter/foundation.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
+import 'package:dytimetable/pref.dart';
 
 import "package:dytimetable/firebase_options.dart";
 
@@ -38,22 +39,14 @@ Future<void> getToken() async {
 }
 
 Future<void> subscribeToTopic(String topic) async {
-  await unsubscribeAllTopic()
-      .then((_) => FirebaseMessaging.instance.subscribeToTopic(topic));
-  debugPrint("subscribeToTopic : $topic");
-
-  return;
-}
-
-Future<void> unsubscribeAllTopic() async {
-  var grade = List.generate(3, (index) => index + 1);
-  var classes = List.generate(10, (index) => index + 1);
-
-  for (var g in grade) {
-    for (var c in classes) {
-      await FirebaseMessaging.instance.unsubscribeFromTopic("$g-$c");
-    }
+  String? classroom = await getClassroom();
+  if (classroom != null) {
+    await FirebaseMessaging.instance.unsubscribeFromTopic(classroom);
   }
+
+  await setClassroom(topic);
+  await FirebaseMessaging.instance.subscribeToTopic(topic);
+  debugPrint("subscribeToTopic : $topic");
 
   return;
 }
