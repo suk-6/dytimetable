@@ -38,9 +38,11 @@ Future<void> getToken() async {
 }
 
 Future<void> subscribeToTopic(String topic) async {
+  await unsubscribeAllTopic()
+      .then((_) => FirebaseMessaging.instance.subscribeToTopic(topic));
   debugPrint("subscribeToTopic : $topic");
-  await unsubscribeAllTopic();
-  await FirebaseMessaging.instance.subscribeToTopic(topic);
+
+  return;
 }
 
 Future<void> unsubscribeAllTopic() async {
@@ -52,4 +54,6 @@ Future<void> unsubscribeAllTopic() async {
       await FirebaseMessaging.instance.unsubscribeFromTopic("$g-$c");
     }
   }
+
+  return;
 }

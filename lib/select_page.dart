@@ -12,6 +12,7 @@ class SelectPage extends StatefulWidget {
 class _SelectPageState extends State<SelectPage> {
   late String selectedGrade = '';
   late String selectedClass = '';
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,25 +63,34 @@ class _SelectPageState extends State<SelectPage> {
               ],
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (selectedGrade != '' && selectedClass != '') {
-                  subscribeToTopic('$selectedGrade-$selectedClass');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('설정이 완료되었습니다.'),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('학년과 반을 선택해주세요.'),
-                    ),
-                  );
-                }
-              },
-              child: const Text('설정하기'),
-            ),
+            isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () {
+                      if (selectedGrade != '' && selectedClass != '') {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        subscribeToTopic('$selectedGrade-$selectedClass')
+                            .then((value) =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('설정이 완료되었습니다.'),
+                                  ),
+                                ))
+                            .then((value) => setState(() {
+                                  isLoading = false;
+                                }));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('학년과 반을 선택해주세요.'),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('설정하기'),
+                  ),
           ],
         ),
       ),
