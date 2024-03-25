@@ -13,3 +13,11 @@ Future<void> setClassroom(String classroom) async {
 Future<String?> getClassroom() async {
   return _prefs!.getString('classroom');
 }
+
+Future<void> setISA(String key, String value) async {
+  await _prefs!.setString(key, value);
+}
+
+Future<String?> getISA(String key) async {
+  return _prefs!.getString(key);
+}

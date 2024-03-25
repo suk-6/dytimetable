@@ -40,10 +40,16 @@ Future<void> getToken() async {
 
 Future<void> subscribeToTopic(String topic) async {
   String? classroom = await getClassroom();
+  String? isSubscribedAll = await getISA('isSubscribedAll');
+
   if (classroom != null) {
     await FirebaseMessaging.instance.unsubscribeFromTopic(classroom);
-  } else {
+  }
+
+  if (isSubscribedAll == null) {
     await FirebaseMessaging.instance.subscribeToTopic("all");
+    await setISA('isSubscribedAll', '1');
+    debugPrint("subscribeToTopic : all");
   }
 
   await setClassroom(topic);
