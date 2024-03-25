@@ -42,6 +42,8 @@ Future<void> subscribeToTopic(String topic) async {
   String? classroom = await getClassroom();
   if (classroom != null) {
     await FirebaseMessaging.instance.unsubscribeFromTopic(classroom);
+  } else {
+    await FirebaseMessaging.instance.subscribeToTopic("all");
   }
 
   await setClassroom(topic);
