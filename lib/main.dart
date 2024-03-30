@@ -1,3 +1,4 @@
+import 'package:dytimetable/onboarding.dart';
 import 'package:dytimetable/select_page.dart';
 import "package:flutter/material.dart";
 import 'package:dytimetable/firebase_setup.dart';
@@ -9,16 +10,36 @@ Future<void> main() async {
   await setupFlutterNotifications();
   await initSharedPreferences();
 
-  runApp(const MyApp());
+  runApp(const MaterialApp(
+    home: MyApp(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late bool isOnboardingDone = false;
+
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SelectPage(),
-    );
+    getClassroom().then((String? classroom) {
+      if (classroom == null) {
+        setState(() {
+          isOnboardingDone = false;
+        });
+      } else {
+        setState(() {
+          isOnboardingDone = true;
+        });
+      }
+    });
+
+    return isOnboardingDone ? const SelectPage() : const OnboardingPage();
   }
 }
