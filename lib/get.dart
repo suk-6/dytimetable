@@ -28,7 +28,8 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
     final data = jsonDecode(response.body);
     for (int i = 0; i < 5; i++) {
       for (int j = 0; j < 7; j++) {
-        timetableData[j + 1][i + 1] = data[i][j]["subject"];
+        timetableData[j + 1][i + 1] =
+            '${data[i][j]["subject"]}\n${data[i][j]["teacher"]}';
       }
     }
 

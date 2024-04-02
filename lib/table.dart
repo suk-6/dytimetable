@@ -72,34 +72,20 @@ class _TablePageState extends State<TablePage> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            DropdownButton(
-                                value: classroom,
-                                items: generateClassroomList().map((e) {
-                                  return DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    classroom = value;
-                                    data = getTimeTableData(classroom);
-                                  });
-                                }),
-                            const SizedBox(width: 20),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  data = getTimeTableData(classroom);
-                                });
-                              },
-                              child: const Text('새로고침'),
-                            )
-                          ],
-                        )
+                        DropdownButton(
+                            value: classroom,
+                            items: generateClassroomList().map((e) {
+                              return DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                classroom = value;
+                                data = getTimeTableData(classroom);
+                              });
+                            }),
                       ]);
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
