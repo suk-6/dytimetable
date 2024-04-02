@@ -62,6 +62,9 @@ class _TablePageState extends State<TablePage> {
                                 (subIndex) => Container(
                                   alignment: Alignment.center,
                                   height: 50,
+                                  color: checkDay(index, subIndex)
+                                      ? Colors.yellow
+                                      : null,
                                   child: Text(
                                     snapshot.data![index][subIndex],
                                     style: const TextStyle(fontSize: 16),

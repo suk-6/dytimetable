@@ -7,3 +7,15 @@ List<String> generateClassroomList() {
   }
   return classroomList;
 }
+
+bool checkDay(int index, int subIndex) {
+  if (index != 0 || subIndex == 0) {
+    return false;
+  }
+  // 1: 월, 2: 화, 3: 수, 4: 목, 5: 금
+  DateTime now = DateTime.now();
+  int day = now.weekday;
+  if (subIndex == day) return true;
+
+  return false;
+}
