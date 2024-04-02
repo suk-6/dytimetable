@@ -1,5 +1,5 @@
 import 'package:dytimetable/onboarding.dart';
-import 'package:dytimetable/select_page.dart';
+import 'package:dytimetable/table.dart';
 import "package:flutter/material.dart";
 import 'package:dytimetable/firebase_setup.dart';
 import 'package:dytimetable/pref.dart';
@@ -40,6 +40,6 @@ class _MyAppState extends State<MyApp> {
       }
     });
 
-    return isOnboardingDone ? const SelectPage() : const OnboardingPage();
+    return isOnboardingDone ? const TablePage() : const OnboardingPage();
   }
 }

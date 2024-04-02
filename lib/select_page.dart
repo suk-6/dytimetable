@@ -17,9 +17,7 @@ class _SelectPageState extends State<SelectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('시간표 알림 설정하기'),
-      ),
+      appBar: AppBar(title: const Text('시간표 알림 설정하기')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
