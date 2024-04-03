@@ -1,3 +1,4 @@
+import 'package:dytimetable/table.dart';
 import 'package:flutter/material.dart';
 import 'firebase_setup.dart';
 
@@ -78,7 +79,12 @@ class _SelectPageState extends State<SelectPage> {
                                 ))
                             .then((value) => setState(() {
                                   isLoading = false;
-                                }));
+                                }))
+                            .then((value) => Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const TablePage()),
+                                (route) => false));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
