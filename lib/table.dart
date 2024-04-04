@@ -1,5 +1,6 @@
 import 'package:dytimetable/get.dart';
 import 'package:dytimetable/pref.dart';
+import 'package:dytimetable/setting_page.dart';
 import 'package:dytimetable/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:dytimetable/select_page.dart';
@@ -37,7 +38,7 @@ class _TablePageState extends State<TablePage> {
           icon: const Icon(Icons.settings),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SelectPage()));
+                MaterialPageRoute(builder: (context) => const SettingPage()));
           },
         )
       ]),
