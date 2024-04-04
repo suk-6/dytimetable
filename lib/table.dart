@@ -3,7 +3,6 @@ import 'package:dytimetable/pref.dart';
 import 'package:dytimetable/setting_page.dart';
 import 'package:dytimetable/tools.dart';
 import 'package:flutter/material.dart';
-import 'package:dytimetable/select_page.dart';
 
 // ignore: must_be_immutable
 class TablePage extends StatefulWidget {
