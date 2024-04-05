@@ -40,3 +40,25 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
     throw Exception('Failed to load timetable data');
   }
 }
+
+Future<List<List<dynamic>>> getMealData() async {
+  final response =
+      await http.get(Uri.parse('https://timetable.dyhs.kr/getmeal'));
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+
+    List<List<dynamic>> mealData =
+        List.generate(data.length, (index) => ['', '', '']);
+
+    for (int i = 0; i < data.length; i++) {
+      mealData[i][0] = data[i][0];
+      mealData[i][1] = data[i][1];
+      mealData[i][2] = data[i][0] ? data[i][2] : '급식이 없습니다.';
+    }
+
+    return mealData;
+  } else {
+    throw Exception('Failed to load meal data');
+  }
+}

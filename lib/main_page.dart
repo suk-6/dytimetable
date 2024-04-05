@@ -14,16 +14,18 @@ class TablePage extends StatefulWidget {
 }
 
 class _TablePageState extends State<TablePage> {
-  late Future timetableData = getTimeTableData(null);
+  int _index = 0;
   // ignore: avoid_init_to_null
   String? classroom = null;
-  int _index = 0;
+  late Future mealData = getMealData();
+  late Future timetableData = getTimeTableData(null);
 
   @override
   void initState() {
     getClassroom().then((String? value) {
       setState(() {
         classroom = value;
+        mealData = getMealData();
         timetableData = getTimeTableData(classroom);
       });
     });
@@ -42,68 +44,99 @@ class _TablePageState extends State<TablePage> {
           },
         )
       ]),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _index == 0
-              ? [
-                  FutureBuilder(
-                    future: timetableData,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasData) {
-                        return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Table(
-                                border: TableBorder.all(),
-                                children: List.generate(
-                                  snapshot.data!.length,
-                                  (index) => TableRow(
-                                    children: List.generate(
-                                      snapshot.data![index].length,
-                                      (subIndex) => Container(
-                                        alignment: Alignment.center,
-                                        height: 50,
-                                        color: checkDay(index, subIndex)
-                                            ? Colors.yellow
-                                            : null,
-                                        child: Text(
-                                          snapshot.data![index][subIndex],
-                                          style: const TextStyle(fontSize: 16),
+      body: _index == 0
+          ? Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FutureBuilder(
+                      future: timetableData,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Table(
+                                  border: TableBorder.all(),
+                                  children: List.generate(
+                                    snapshot.data!.length,
+                                    (index) => TableRow(
+                                      children: List.generate(
+                                        snapshot.data![index].length,
+                                        (subIndex) => Container(
+                                          alignment: Alignment.center,
+                                          height: 50,
+                                          color: checkDay(index, subIndex)
+                                              ? Colors.yellow
+                                              : null,
+                                          child: Text(
+                                            snapshot.data![index][subIndex],
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              DropdownButton(
-                                  value: classroom,
-                                  items: generateClassroomList().map((e) {
-                                    return DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      classroom = value;
-                                      timetableData =
-                                          getTimeTableData(classroom);
-                                    });
-                                  }),
-                            ]);
-                      } else if (snapshot.hasError) {
-                        return Text("${snapshot.error}");
-                      } else {
-                        return const CircularProgressIndicator();
-                      }
-                    },
-                  )
-                ]
-              : [],
-        ),
-      ),
+                                const SizedBox(height: 20),
+                                DropdownButton(
+                                    value: classroom,
+                                    items: generateClassroomList().map((e) {
+                                      return DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        classroom = value;
+                                        timetableData =
+                                            getTimeTableData(classroom);
+                                      });
+                                    }),
+                              ]);
+                        } else if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    )
+                  ]),
+            )
+          : FutureBuilder(
+              future: mealData,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData && snapshot.data != []) {
+                  return ListView(
+                    padding: const EdgeInsets.all(10),
+                    children: List.generate(snapshot.data.length, (index) {
+                      return Card(
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(snapshot.data[index][1],
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            ListTile(
+                              title: Text(snapshot.data[index][2]
+                                  .toString()
+                                  .replaceAll(',', '\n')),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              }),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         items: const <BottomNavigationBarItem>[
