@@ -10,8 +10,6 @@
 
 [https://timetable.dyhs.kr/install](https://timetable.dyhs.kr/install)
 
-> iOS 버전은 준비중입니다.
-
 ## Contact
 
 -   Email: [me@suk.kr](mailto:me@suk.kr)
