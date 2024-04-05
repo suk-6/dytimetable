@@ -2,6 +2,7 @@ import 'package:dytimetable/get.dart';
 import 'package:dytimetable/pref.dart';
 import 'package:dytimetable/setting_page.dart';
 import 'package:dytimetable/tools.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -52,6 +53,8 @@ class _TablePageState extends State<TablePage> {
                     FutureBuilder(
                       future: timetableData,
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        FirebaseAnalytics.instance
+                            .logEvent(name: "timetable_page");
                         if (snapshot.hasData) {
                           return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -151,6 +154,12 @@ class _TablePageState extends State<TablePage> {
         ],
         selectedItemColor: Colors.amber[800],
         onTap: (index) {
+          if (index == 0) {
+            FirebaseAnalytics.instance.logEvent(name: "timetable_page");
+          }
+          if (index == 1) {
+            FirebaseAnalytics.instance.logEvent(name: "meal_page");
+          }
           setState(() {
             _index = index;
           });

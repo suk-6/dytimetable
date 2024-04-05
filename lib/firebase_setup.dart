@@ -5,11 +5,13 @@ import 'package:dytimetable/pref.dart';
 
 import "package:dytimetable/firebase_options.dart";
 
-Future<void> setupFlutterNotifications() async {
+Future<void> setupFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+}
 
+Future<void> setupFlutterNotifications() async {
   await FirebaseMessaging.instance.requestPermission(
     alert: true,
     announcement: false,

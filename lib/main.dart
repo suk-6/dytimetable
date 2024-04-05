@@ -1,12 +1,13 @@
 import 'package:dytimetable/onboarding.dart';
 import 'package:dytimetable/main_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import "package:flutter/material.dart";
 import 'package:dytimetable/firebase_setup.dart';
 import 'package:dytimetable/pref.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await setupFirebase();
   await setupFlutterNotifications();
   await initSharedPreferences();
 
@@ -26,6 +27,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late bool isOnboardingDone = false;
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   @override
   Widget build(BuildContext context) {
     getClassroom().then((String? classroom) {
@@ -40,6 +42,9 @@ class _MyAppState extends State<MyApp> {
       }
     });
 
-    return isOnboardingDone ? const TablePage() : const OnboardingPage();
+    return MaterialApp(
+      home: isOnboardingDone ? const TablePage() : const OnboardingPage(),
+      navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
+    );
   }
 }
