@@ -1,4 +1,4 @@
-import 'package:dytimetable/table.dart';
+import 'package:dytimetable/main_page.dart';
 import 'package:flutter/material.dart';
 import 'firebase_setup.dart';
 

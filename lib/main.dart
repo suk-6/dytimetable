@@ -1,5 +1,5 @@
 import 'package:dytimetable/onboarding.dart';
-import 'package:dytimetable/table.dart';
+import 'package:dytimetable/main_page.dart';
 import "package:flutter/material.dart";
 import 'package:dytimetable/firebase_setup.dart';
 import 'package:dytimetable/pref.dart';
