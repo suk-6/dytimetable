@@ -154,11 +154,13 @@ class _TablePageState extends State<TablePage> {
         ],
         selectedItemColor: Colors.amber[800],
         onTap: (index) {
-          if (index == 0) {
-            FirebaseAnalytics.instance.logEvent(name: "timetable_page");
-          }
-          if (index == 1) {
-            FirebaseAnalytics.instance.logEvent(name: "meal_page");
+          switch (index) {
+            case 0:
+              FirebaseAnalytics.instance.logEvent(name: "timetable_page");
+              break;
+            case 1:
+              FirebaseAnalytics.instance.logEvent(name: "meal_page");
+              break;
           }
           setState(() {
             _index = index;
