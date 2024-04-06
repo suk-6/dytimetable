@@ -68,7 +68,10 @@ class _TablePageState extends State<TablePage> {
                                         snapshot.data![index].length,
                                         (subIndex) => Container(
                                           alignment: Alignment.center,
-                                          height: 55,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              16,
                                           color: checkDay(index, subIndex)
                                               ? Colors.yellow
                                               : null,
@@ -82,7 +85,9 @@ class _TablePageState extends State<TablePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20),
+                                SizedBox(
+                                    height: MediaQuery.of(context).size.height /
+                                        50),
                                 DropdownButton(
                                     value: classroom,
                                     items: generateClassroomList().map((e) {
