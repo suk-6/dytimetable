@@ -124,15 +124,22 @@ class _TablePageState extends State<TablePage> {
                         child: Column(
                           children: [
                             ListTile(
-                              title: Text(snapshot.data[index][1],
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            ListTile(
-                              title: Text(snapshot.data[index][2]
-                                  .toString()
-                                  .replaceAll(',', '\n')),
+                              title: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height /
+                                          200,
+                                      bottom:
+                                          MediaQuery.of(context).size.height /
+                                              100),
+                                  child: Text(snapshot.data[index][1],
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold))),
+                              subtitle: Text(
+                                  snapshot.data[index][2]
+                                      .toString()
+                                      .replaceAll(',', '\n'),
+                                  style: const TextStyle(fontSize: 14)),
                             ),
                           ],
                         ),
