@@ -1,7 +1,7 @@
-import 'package:dytimetable/get.dart';
-import 'package:dytimetable/pref.dart';
-import 'package:dytimetable/setting_page.dart';
-import 'package:dytimetable/tools.dart';
+import 'package:dytimetable/utils/get.dart';
+import 'package:dytimetable/utils/pref.dart';
+import 'package:dytimetable/pages/setting_page.dart';
+import 'package:dytimetable/utils/tools.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 

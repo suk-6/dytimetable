@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dytimetable/pref.dart';
+import 'package:dytimetable/utils/pref.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<List<String>>> getTimeTableData(String? classroom) async {

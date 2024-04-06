@@ -1,9 +1,9 @@
 import "package:flutter/foundation.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
-import 'package:dytimetable/pref.dart';
+import 'package:dytimetable/utils/pref.dart';
 
-import "package:dytimetable/firebase_options.dart";
+import "package:dytimetable/firebase/firebase_options.dart";
 
 Future<void> setupFirebase() async {
   await Firebase.initializeApp(

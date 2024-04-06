@@ -1,6 +1,6 @@
-import 'package:dytimetable/main_page.dart';
+import 'package:dytimetable/pages/main_page.dart';
 import 'package:flutter/material.dart';
-import 'firebase_setup.dart';
+import '../firebase/firebase_setup.dart';
 
 class SelectPage extends StatefulWidget {
   const SelectPage({super.key});
