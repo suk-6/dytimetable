@@ -1,9 +1,9 @@
 import 'package:dytimetable/onboarding.dart';
-import 'package:dytimetable/main_page.dart';
+import 'package:dytimetable/pages/main_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import "package:flutter/material.dart";
-import 'package:dytimetable/firebase_setup.dart';
-import 'package:dytimetable/pref.dart';
+import 'package:dytimetable/firebase/firebase_setup.dart';
+import 'package:dytimetable/utils/pref.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
