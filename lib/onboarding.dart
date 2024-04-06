@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:dytimetable/select_page.dart';
+import 'package:dytimetable/pages/select_page.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
