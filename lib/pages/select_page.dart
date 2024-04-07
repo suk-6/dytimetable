@@ -1,4 +1,5 @@
 import 'package:dytimetable/pages/main_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import '../firebase/firebase_setup.dart';
 
@@ -70,6 +71,9 @@ class _SelectPageState extends State<SelectPage> {
                         setState(() {
                           isLoading = true;
                         });
+                        FirebaseAnalytics.instance.logSelectContent(
+                            contentType: 'select_classroom',
+                            itemId: '$selectedGrade-$selectedClass');
                         subscribeToTopic('$selectedGrade-$selectedClass')
                             .then((value) =>
                                 ScaffoldMessenger.of(context).showSnackBar(

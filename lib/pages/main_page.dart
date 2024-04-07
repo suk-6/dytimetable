@@ -71,14 +71,16 @@ class _TablePageState extends State<TablePage> {
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height /
-                                              16,
+                                              14,
                                           color: checkDay(index, subIndex)
                                               ? Colors.yellow
                                               : null,
                                           child: Text(
                                             snapshot.data![index][subIndex],
-                                            style:
-                                                const TextStyle(fontSize: 16),
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: "Pretendard",
+                                                fontWeight: FontWeight.w300),
                                           ),
                                         ),
                                       ),

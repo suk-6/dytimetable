@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:dytimetable/pages/select_page.dart';
 
@@ -7,12 +8,14 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalytics.instance.logTutorialBegin();
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(actions: [
         IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
+            FirebaseAnalytics.instance.logTutorialComplete();
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const SelectPage()),
@@ -28,9 +31,7 @@ class OnboardingPage extends StatelessWidget {
             viewportFraction: 1,
             autoPlay: false,
             autoPlayInterval: const Duration(seconds: 4),
-            onPageChanged: ((index, reason) {
-              // 페이지가 슬라이드될 때의 기능 정의
-            }),
+            onPageChanged: ((index, reason) {}),
           ),
           items: [
             'assets/images/onboarding-1.png',

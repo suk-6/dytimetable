@@ -10,6 +10,7 @@ Future<void> main() async {
   await setupFirebase();
   await setupFlutterNotifications();
   await initSharedPreferences();
+  FirebaseAnalytics.instance.logAppOpen();
 
   runApp(const MaterialApp(
     home: MyApp(),
@@ -27,7 +28,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late bool isOnboardingDone = false;
 
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   @override
   Widget build(BuildContext context) {
     getClassroom().then((String? classroom) {
@@ -44,7 +44,10 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       home: isOnboardingDone ? const TablePage() : const OnboardingPage(),
-      navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
+      theme: ThemeData(fontFamily: "Pretendard"),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)
+      ],
     );
   }
 }
