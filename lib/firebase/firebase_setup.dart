@@ -9,10 +9,8 @@ Future<void> setupFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-}
 
-Future<void> setupFlutterNotifications() async {
-  await FirebaseMessaging.instance.requestPermission(
+  FirebaseMessaging.instance.requestPermission(
     alert: true,
     announcement: false,
     badge: false,
@@ -22,7 +20,33 @@ Future<void> setupFlutterNotifications() async {
     sound: true,
   );
 
+  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
+    _messageHandler(message, "foreground");
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
+    _messageHandler(message, "background");
+  });
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    _messageHandler(message, "terminated");
+  });
+
   getToken();
+}
+
+Future<void> _onBackgroundMessage(RemoteMessage? message) async {}
+
+Future<void> _messageHandler(
+    RemoteMessage? message, String receivedType) async {
+  if (message != null) {
+    if (message.notification != null) {
+      debugPrint(message.notification!.title);
+      debugPrint(message.notification!.body);
+      debugPrint(message.data["click_action"]);
+      debugPrint(receivedType);
+    }
+  }
 }
 
 Future<void> getToken() async {
@@ -45,18 +69,26 @@ Future<void> subscribeToTopic(String topic) async {
   String? isSubscribedAll = await getISA('isSubscribedAll');
 
   if (classroom != null) {
-    await FirebaseMessaging.instance.unsubscribeFromTopic(classroom);
+    await FirebaseMessaging.instance
+        .unsubscribeFromTopic(classroom)
+        .then((value) {
+      debugPrint("unsubscribeFromTopic : $classroom");
+    });
   }
 
   if (isSubscribedAll == null) {
-    await FirebaseMessaging.instance.subscribeToTopic("all");
-    await setISA('isSubscribedAll', '1');
-    debugPrint("subscribeToTopic : all");
+    await FirebaseMessaging.instance
+        .subscribeToTopic("all")
+        .then((value) async {
+      await setISA('isSubscribedAll', '1');
+      debugPrint("subscribeToTopic : all");
+    });
   }
 
-  await setClassroom(topic);
-  await FirebaseMessaging.instance.subscribeToTopic(topic);
-  debugPrint("subscribeToTopic : $topic");
+  await FirebaseMessaging.instance.subscribeToTopic(topic).then((value) async {
+    await setClassroom(topic);
+    debugPrint("subscribeToTopic : $topic");
+  });
 
   return;
 }

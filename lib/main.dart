@@ -8,7 +8,6 @@ import 'package:dytimetable/utils/pref.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupFirebase();
-  await setupFlutterNotifications();
   await initSharedPreferences();
   FirebaseAnalytics.instance.logAppOpen();
 
