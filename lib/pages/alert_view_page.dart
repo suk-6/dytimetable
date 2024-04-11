@@ -13,13 +13,15 @@ class AlertViewPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                data[1],
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 30.0,
-                ),
-              ),
+              FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    data[1],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 30.0,
+                    ),
+                  )),
               const SizedBox(height: 8.0),
               Text(
                 data[3],
