@@ -1,3 +1,4 @@
+import 'package:dytimetable/pages/alert_page.dart';
 import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/pages/setting_page.dart';
@@ -37,6 +38,13 @@ class _TablePageState extends State<TablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(actions: [
+        IconButton(
+          icon: const Icon(Icons.notifications),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AlertPage()));
+          },
+        ),
         IconButton(
           icon: const Icon(Icons.settings),
           onPressed: () {
