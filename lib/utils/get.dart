@@ -65,3 +65,28 @@ Future<List<List<dynamic>>> getMealData() async {
     throw Exception('Failed to load meal data');
   }
 }
+
+Future<List<List<dynamic>>> getNoticeData() async {
+  final urlClassroom = (await getClassroom())?.replaceFirst('-', '/');
+  final response = await http
+      .get(Uri.parse('https://timetable.dyhs.kr/getnotice/$urlClassroom'));
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+
+    List<List<dynamic>> noticeData =
+        List.generate(data.length, (index) => [0, '', '', '']);
+
+    for (int i = 0; i < data.length; i++) {
+      noticeData[i][0] = data[i][0];
+      noticeData[i][1] = data[i][1];
+      noticeData[i][2] = data[i][2];
+      noticeData[i][3] = data[i][3];
+    }
+
+    noticeData.sort((a, b) => b[0].compareTo(a[0]));
+    return noticeData;
+  } else {
+    throw Exception('Failed to load notice data');
+  }
+}
