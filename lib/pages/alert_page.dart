@@ -1,5 +1,6 @@
 import 'package:dytimetable/pages/alert_view_page.dart';
 import 'package:dytimetable/utils/get.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class AlertPage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _AlertPageState extends State<AlertPage> {
         body: FutureBuilder(
             future: noticeData,
             builder: (context, snapshot) {
+              FirebaseAnalytics.instance.logEvent(name: "alert_page");
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
@@ -42,6 +44,8 @@ class _AlertPageState extends State<AlertPage> {
                         itemBuilder: (context, index) {
                           return InkWell(
                               onTap: () {
+                                FirebaseAnalytics.instance
+                                    .logEvent(name: "click_alert_in_list");
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return AlertViewPage(snapshot.data[index]);

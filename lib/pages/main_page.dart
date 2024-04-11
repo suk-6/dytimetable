@@ -4,6 +4,7 @@ import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/pages/setting_page.dart';
 import 'package:dytimetable/utils/tools.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -24,6 +25,12 @@ class _TablePageState extends State<TablePage> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      final snackBar = SnackBar(
+          content: Text(
+              "${message.notification!.title!}\n${message.notification!.body!}"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
     getClassroom().then((String? value) {
       setState(() {
         classroom = value;
