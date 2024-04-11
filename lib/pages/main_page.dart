@@ -149,7 +149,7 @@ class _TablePageState extends State<TablePage> {
                                   snapshot.data[index][2]
                                       .toString()
                                       .replaceAll(',', '\n'),
-                                  style: const TextStyle(fontSize: 14)),
+                                  style: const TextStyle(fontSize: 15)),
                             ),
                           ],
                         ),
