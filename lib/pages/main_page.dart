@@ -38,6 +38,16 @@ class _TablePageState extends State<TablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(actions: [
+        if (_index == 0)
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              FirebaseAnalytics.instance.logEvent(name: "timetable_refresh");
+              setState(() {
+                timetableData = getTimeTableData(classroom);
+              });
+            },
+          ),
         IconButton(
           icon: const Icon(Icons.notifications),
           onPressed: () {
@@ -127,35 +137,46 @@ class _TablePageState extends State<TablePage> {
               future: mealData,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData && snapshot.data != []) {
-                  return ListView(
-                    padding: const EdgeInsets.all(10),
-                    children: List.generate(snapshot.data.length, (index) {
-                      return Card(
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Padding(
-                                  padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height /
-                                          200,
-                                      bottom:
-                                          MediaQuery.of(context).size.height /
+                  return RefreshIndicator(
+                      onRefresh: () async {
+                        FirebaseAnalytics.instance
+                            .logEvent(name: "meal_refresh");
+                        setState(() {
+                          mealData = getMealData();
+                        });
+                      },
+                      child: ListView(
+                        padding: const EdgeInsets.all(10),
+                        children: List.generate(snapshot.data.length, (index) {
+                          return Card(
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              200,
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
                                               100),
-                                  child: Text(snapshot.data[index][1],
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold))),
-                              subtitle: Text(
-                                  snapshot.data[index][2]
-                                      .toString()
-                                      .replaceAll(',', '\n'),
-                                  style: const TextStyle(fontSize: 15)),
+                                      child: Text(snapshot.data[index][1],
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold))),
+                                  subtitle: Text(
+                                      snapshot.data[index][2]
+                                          .toString()
+                                          .replaceAll(',', '\n'),
+                                      style: const TextStyle(fontSize: 15)),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }),
-                  );
+                          );
+                        }),
+                      ));
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 } else {
