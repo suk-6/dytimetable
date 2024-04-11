@@ -75,7 +75,7 @@ Future<List<List<dynamic>>> getNoticeData() async {
     final data = jsonDecode(response.body);
 
     List<List<dynamic>> noticeData =
-        List.generate(data.length, (index) => [0, '', '', '']);
+        List.generate(data.length, (index) => ['', '', '', '']);
 
     for (int i = 0; i < data.length; i++) {
       noticeData[i][0] = data[i][0];
