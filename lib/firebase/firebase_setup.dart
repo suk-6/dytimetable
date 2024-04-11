@@ -22,42 +22,13 @@ Future<void> setupFirebase() async {
 
   FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
-    _messageHandler(message, "foreground");
-  });
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
-    _messageHandler(message, "background");
-  });
-  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-    _messageHandler(message, "terminated");
-  });
-
   getToken();
 }
 
 Future<void> _onBackgroundMessage(RemoteMessage? message) async {}
 
-Future<void> _messageHandler(
-    RemoteMessage? message, String receivedType) async {
-  if (message != null) {
-    if (message.notification != null) {
-      debugPrint(message.notification!.title);
-      debugPrint(message.notification!.body);
-      debugPrint(message.data["click_action"]);
-      debugPrint(receivedType);
-    }
-  }
-}
-
 Future<void> getToken() async {
   String? token;
-
-  // if (defaultTargetPlatform == TargetPlatform.iOS ||
-  //     defaultTargetPlatform == TargetPlatform.macOS) {
-  //   token = await FirebaseMessaging.instance.getAPNSToken();
-  // } else {
-  //   token = await FirebaseMessaging.instance.getToken();
-  // }
 
   token = await FirebaseMessaging.instance.getToken();
 
