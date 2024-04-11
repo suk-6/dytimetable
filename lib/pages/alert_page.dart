@@ -39,33 +39,37 @@ class _AlertPageState extends State<AlertPage> {
                         noticeData = getNoticeData();
                       });
                     },
-                    child: ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                              onTap: () {
-                                FirebaseAnalytics.instance
-                                    .logEvent(name: "click_alert_in_list");
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return AlertViewPage(snapshot.data[index]);
-                                }));
-                              },
-                              child: Card(
-                                elevation: 2,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                color: Colors.grey[200],
-                                borderOnForeground: true,
-                                shadowColor: Colors.grey[400],
-                                child: ListTile(
-                                  leading: const Icon(Icons.notifications),
-                                  title: Text(snapshot.data[index][1]),
-                                  subtitle: Text(snapshot.data[index][2]),
-                                  trailing: Text(snapshot.data[index][3]),
-                                ),
-                              ));
-                        }));
+                    child: snapshot.data.length == 0
+                        ? const Center(child: Text('알림이 없습니다.'))
+                        : ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                  onTap: () {
+                                    FirebaseAnalytics.instance
+                                        .logEvent(name: "click_alert_in_list");
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return AlertViewPage(
+                                          snapshot.data[index]);
+                                    }));
+                                  },
+                                  child: Card(
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    color: Colors.grey[200],
+                                    borderOnForeground: true,
+                                    shadowColor: Colors.grey[400],
+                                    child: ListTile(
+                                      leading: const Icon(Icons.notifications),
+                                      title: Text(snapshot.data[index][1]),
+                                      subtitle: Text(snapshot.data[index][2]),
+                                      trailing: Text(snapshot.data[index][3]),
+                                    ),
+                                  ));
+                            }));
               }
             }));
   }
