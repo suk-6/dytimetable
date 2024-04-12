@@ -28,11 +28,24 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
     final data = jsonDecode(response.body);
     for (int i = 0; i < 5; i++) {
       for (int j = 0; j < 7; j++) {
-        if (data[i][j]["teacher"].length > 2) {
+        if (data[i][j] == null) {
+          timetableData[j + 1][i + 1] = '';
+          continue;
+        }
+
+        data[i][j]["teacher"] = data[i][j]["teacher"].replaceAll('*', '');
+
+        if (data[i][j]["teacher"].length > 3) {
           data[i][j]["teacher"] = data[i][j]["teacher"].substring(0, 2) + '...';
         }
-        timetableData[j + 1][i + 1] =
-            '${data[i][j]["subject"]}\n${data[i][j]["teacher"]}';
+
+        if (await getMode() == 'teacher' && classroom == '교사') {
+          timetableData[j + 1][i + 1] =
+              '${data[i][j]["subject"]}\n${data[i][j]["grade"]}-${data[i][j]["classroom"]}';
+        } else {
+          timetableData[j + 1][i + 1] =
+              '${data[i][j]["subject"]}\n${data[i][j]["teacher"]}';
+        }
       }
     }
 

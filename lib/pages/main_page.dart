@@ -46,11 +46,9 @@ class _TablePageState extends State<TablePage> {
           });
         });
       } else if (mode == 'teacher') {
-        getTeacherNo().then((String? teacherNo) {
-          setState(() {
-            classroom = teacherNo;
-            timetableData = getTimeTableData(classroom);
-          });
+        setState(() {
+          classroom = '교사';
+          timetableData = getTimeTableData(classroom);
         });
       }
     });
@@ -62,7 +60,7 @@ class _TablePageState extends State<TablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(actions: [
-        if (_index == 0 && mode == 'student')
+        if (_index == 0)
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
@@ -123,6 +121,7 @@ class _TablePageState extends State<TablePage> {
                                                 fontSize: 16,
                                                 fontFamily: "Pretendard",
                                                 fontWeight: FontWeight.w300),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
