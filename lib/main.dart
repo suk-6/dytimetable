@@ -1,6 +1,7 @@
 import 'package:dytimetable/onboarding.dart';
 import 'package:dytimetable/pages/alert_page.dart';
 import 'package:dytimetable/pages/main_page.dart';
+import 'package:dytimetable/utils/tools.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import "package:flutter/material.dart";
@@ -51,22 +52,25 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     setupInteractedMessage();
+
+    migrateData().then((value) {
+      getMode().then((value) {
+        debugPrint(value);
+        if (value == null) {
+          setState(() {
+            isOnboardingDone = false;
+          });
+        } else {
+          setState(() {
+            isOnboardingDone = true;
+          });
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    getClassroom().then((String? classroom) {
-      if (classroom == null) {
-        setState(() {
-          isOnboardingDone = false;
-        });
-      } else {
-        setState(() {
-          isOnboardingDone = true;
-        });
-      }
-    });
-
     return MaterialApp(
       home: isOnboardingDone ? const TablePage() : const OnboardingPage(),
       theme: ThemeData(fontFamily: "Pretendard"),

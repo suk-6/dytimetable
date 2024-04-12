@@ -18,8 +18,8 @@ class TablePage extends StatefulWidget {
 
 class _TablePageState extends State<TablePage> {
   int _index = 0;
-  // ignore: avoid_init_to_null
-  String? classroom = null;
+  String? classroom;
+  String? mode;
   late Future mealData = getMealData();
   late Future timetableData = getTimeTableData(null);
 
@@ -31,13 +31,30 @@ class _TablePageState extends State<TablePage> {
               "${message.notification!.title!}\n${message.notification!.body!}"));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
-    getClassroom().then((String? value) {
+
+    getMode().then((value) {
       setState(() {
-        classroom = value;
+        mode = value;
         mealData = getMealData();
-        timetableData = getTimeTableData(classroom);
       });
+
+      if (mode == 'student') {
+        getClassroom().then((String? classroomData) {
+          setState(() {
+            classroom = classroomData;
+            timetableData = getTimeTableData(classroom);
+          });
+        });
+      } else if (mode == 'teacher') {
+        getTeacherNo().then((String? teacherNo) {
+          setState(() {
+            classroom = teacherNo;
+            timetableData = getTimeTableData(classroom);
+          });
+        });
+      }
     });
+
     super.initState();
   }
 
@@ -45,7 +62,7 @@ class _TablePageState extends State<TablePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(actions: [
-        if (_index == 0)
+        if (_index == 0 && mode == 'student')
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {

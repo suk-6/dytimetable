@@ -36,15 +36,30 @@ Future<void> getToken() async {
 }
 
 Future<void> subscribeToTopic(String topic) async {
-  String? classroom = await getClassroom();
   String? isSubscribedAll = await getISA('isSubscribedAll');
 
-  if (classroom != null) {
-    await FirebaseMessaging.instance
-        .unsubscribeFromTopic(classroom)
-        .then((value) {
-      debugPrint("unsubscribeFromTopic : $classroom");
-    });
+  String? mode = await getMode();
+
+  if (mode == 'student') {
+    String? classroom = await getClassroom();
+
+    if (classroom != null) {
+      await FirebaseMessaging.instance
+          .unsubscribeFromTopic(classroom)
+          .then((value) {
+        debugPrint("unsubscribeFromTopic : $classroom");
+      });
+    }
+  } else if (mode == 'teacher') {
+    String? teacherNo = await getTeacherNo();
+
+    if (teacherNo != null) {
+      await FirebaseMessaging.instance
+          .unsubscribeFromTopic(teacherNo)
+          .then((value) {
+        debugPrint("unsubscribeFromTopic : $teacherNo");
+      });
+    }
   }
 
   if (isSubscribedAll == null) {

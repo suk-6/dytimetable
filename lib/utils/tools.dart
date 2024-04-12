@@ -1,3 +1,6 @@
+import 'package:dytimetable/utils/pref.dart';
+import 'package:flutter/material.dart';
+
 List<String> generateClassroomList() {
   List<String> classroomList = [];
   for (int i = 1; i <= 3; i++) {
@@ -5,6 +8,11 @@ List<String> generateClassroomList() {
       classroomList.add('$i-$j');
     }
   }
+
+  if (getModeSync() == 'teacher') {
+    classroomList.add('교사');
+  }
+
   return classroomList;
 }
 
@@ -18,4 +26,13 @@ bool checkDay(int index, int subIndex) {
   if (subIndex == day) return true;
 
   return false;
+}
+
+Future<void> migrateData() async {
+  if ((await getMode()) == null) {
+    if ((await getClassroom()) != null) {
+      await setMode('student');
+      debugPrint('migrate ${await getMode()}');
+    }
+  }
 }

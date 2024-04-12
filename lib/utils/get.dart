@@ -15,7 +15,7 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
   ];
   late String? urlClassroom;
 
-  if (classroom == null) {
+  if (classroom == null || classroom == '교사') {
     urlClassroom = (await getClassroom())?.replaceFirst('-', '/');
   } else {
     urlClassroom = classroom.replaceFirst('-', '/');
@@ -36,7 +36,11 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
       }
     }
 
-    timetableData[0][0] = "${data[0][0]["grade"]}-${data[0][0]["class"]}";
+    if (await getMode() == 'teacher') {
+      timetableData[0][0] = '교사';
+    } else if (await getMode() == 'student') {
+      timetableData[0][0] = "${data[0][0]["grade"]}-${data[0][0]["class"]}";
+    }
 
     return timetableData;
   } else {
@@ -88,5 +92,23 @@ Future<List<List<dynamic>>> getNoticeData() async {
     return noticeData;
   } else {
     throw Exception('Failed to load notice data');
+  }
+}
+
+Future<List<String>> getTeachers() async {
+  final response =
+      await http.get(Uri.parse('https://timetable.dyhs.kr/getTeachers'));
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    List<String> teachers = List.generate(data.length, (index) => '');
+
+    for (int i = 0; i < data.length; i++) {
+      teachers[i] = data[i];
+    }
+
+    return teachers;
+  } else {
+    throw Exception('Failed to load teachers data');
   }
 }
