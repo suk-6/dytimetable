@@ -1,7 +1,7 @@
 import 'package:dytimetable/utils/pref.dart';
 import 'package:flutter/material.dart';
 
-List<String> generateClassroomList() {
+List<String> generateClassroomList(bool addTeacher) {
   List<String> classroomList = [];
   for (int i = 1; i <= 3; i++) {
     for (int j = 1; j <= 10; j++) {
@@ -9,7 +9,7 @@ List<String> generateClassroomList() {
     }
   }
 
-  if (getModeSync() == 'teacher') {
+  if (getModeSync() == 'teacher' && addTeacher) {
     classroomList.add('교사');
   }
 

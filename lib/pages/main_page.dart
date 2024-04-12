@@ -133,7 +133,7 @@ class _TablePageState extends State<TablePage> {
                                         50),
                                 DropdownButton(
                                     value: classroom,
-                                    items: generateClassroomList().map((e) {
+                                    items: generateClassroomList(true).map((e) {
                                       return DropdownMenuItem(
                                         value: e,
                                         child: Text(e),

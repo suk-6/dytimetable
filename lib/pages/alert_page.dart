@@ -1,5 +1,7 @@
+import 'package:dytimetable/pages/alert_send_page.dart';
 import 'package:dytimetable/pages/alert_view_page.dart';
 import 'package:dytimetable/utils/get.dart';
+import 'package:dytimetable/utils/pref.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +25,19 @@ class _AlertPageState extends State<AlertPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            if (getModeSync() == 'teacher')
+              IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const AlertSendPage();
+                  }));
+                },
+              )
+          ],
+        ),
         body: FutureBuilder(
             future: noticeData,
             builder: (context, snapshot) {
