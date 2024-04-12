@@ -18,14 +18,6 @@ String? getModeSync() {
   return _prefs!.getString('mode');
 }
 
-Future<void> setTeacherNo(String teacherNo) async {
-  await _prefs!.setString('teacherNo', teacherNo);
-}
-
-Future<String?> getTeacherNo() async {
-  return _prefs!.getString('teacherNo');
-}
-
 Future<void> setClassroom(String classroom) async {
   await _prefs!.setString('classroom', classroom);
 }
