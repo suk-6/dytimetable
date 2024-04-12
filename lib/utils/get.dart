@@ -50,7 +50,7 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
     }
 
     if (await getMode() == 'teacher') {
-      timetableData[0][0] = '교사';
+      timetableData[0][0] = '교사용';
     } else if (await getMode() == 'student') {
       timetableData[0][0] = "${data[0][0]["grade"]}-${data[0][0]["class"]}";
     }
