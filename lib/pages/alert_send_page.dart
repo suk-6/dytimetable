@@ -65,6 +65,9 @@ class _AlertSendPageState extends State<AlertSendPage> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
               controller: passwordController,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: '비밀번호',
