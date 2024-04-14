@@ -27,6 +27,15 @@ class _AlertPageState extends State<AlertPage> {
     return Scaffold(
         appBar: AppBar(
           actions: [
+            // if (getModeSync() == 'teacher')
+            //   IconButton(
+            //     icon: const Icon(Icons.archive_rounded),
+            //     onPressed: () {
+            //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //         return const AlertSendPage();
+            //       }));
+            //     },
+            //   ),
             if (getModeSync() == 'teacher')
               IconButton(
                 icon: const Icon(Icons.send),
@@ -35,7 +44,7 @@ class _AlertPageState extends State<AlertPage> {
                     return const AlertSendPage();
                   }));
                 },
-              )
+              ),
           ],
         ),
         body: FutureBuilder(
