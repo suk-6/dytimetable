@@ -1,4 +1,4 @@
-import 'package:dytimetable/pages/alert_page.dart';
+import 'package:dytimetable/pages/alert_list_page.dart';
 import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/pages/setting_page.dart';

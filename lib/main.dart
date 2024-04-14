@@ -1,5 +1,5 @@
 import 'package:dytimetable/onboarding.dart';
-import 'package:dytimetable/pages/alert_page.dart';
+import 'package:dytimetable/pages/alert_list_page.dart';
 import 'package:dytimetable/pages/main_page.dart';
 import 'package:dytimetable/utils/tools.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
