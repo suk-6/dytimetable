@@ -203,7 +203,7 @@ class _TablePageState extends State<TablePage> {
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
               }),
       bottomNavigationBar: BottomNavigationBar(
