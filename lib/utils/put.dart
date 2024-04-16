@@ -21,3 +21,17 @@ Future<String> sendNotice(
 
   return response.body;
 }
+
+Future<bool> checkPassword(String password) async {
+  final response = await http.post(
+    Uri.parse('https://timetable.dyhs.kr/checkpassword'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: json.encode({
+      'password': password,
+    }),
+  );
+
+  return response.body == 'true';
+}

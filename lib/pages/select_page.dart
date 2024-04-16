@@ -1,5 +1,6 @@
 import 'package:dytimetable/pages/main_page.dart';
 import 'package:dytimetable/utils/pref.dart';
+import 'package:dytimetable/utils/put.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import '../firebase/firebase_setup.dart';
@@ -18,6 +19,7 @@ class _SelectPageState extends State<SelectPage> {
   late String selectedTeacher = '';
   late String selectedGrade = '';
   late String selectedClass = '';
+  late String password = '';
   bool isLoading = false;
 
   late Future teachers = getTeachers();
@@ -26,6 +28,42 @@ class _SelectPageState extends State<SelectPage> {
   void initState() {
     teachers = getTeachers();
     super.initState();
+  }
+
+  Future<void> dialog() {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('비밀번호 입력', textAlign: TextAlign.center),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(mainAxisSize: MainAxisSize.min, children: [
+                TextField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  onChanged: (value) {
+                    setState(() {
+                      password = value;
+                    });
+                  },
+                ),
+              ]);
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -38,12 +76,34 @@ class _SelectPageState extends State<SelectPage> {
               icon: const Icon(Icons.compare_arrows),
               onPressed: () {
                 setState(() {
-                  if (preMode == 'student') {
-                    preMode = 'teacher';
-                  } else {
-                    preMode = 'student';
-                  }
+                  password = '';
                 });
+                if (preMode == 'student') {
+                  dialog().then((value) {
+                    checkPassword(password).then((value) {
+                      if (value) {
+                        setState(() {
+                          preMode = 'teacher';
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('교사 모드로 전환되었습니다.'),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('비밀번호가 틀렸습니다.'),
+                          ),
+                        );
+                      }
+                    });
+                  });
+                } else {
+                  setState(() {
+                    preMode = 'student';
+                  });
+                }
               },
             ),
           ],
