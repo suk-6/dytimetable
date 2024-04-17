@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import "package:flutter/material.dart";
 import 'package:dytimetable/firebase/firebase_setup.dart';
 import 'package:dytimetable/utils/pref.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,8 @@ class _MyAppState extends State<MyApp> {
     if (message.data['click_action'] == 'notice') {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const AlertPage()));
+    } else if (message.data['click_action'] == 'url') {
+      launchUrl(Uri.parse(message.data['data']!));
     }
   }
 
