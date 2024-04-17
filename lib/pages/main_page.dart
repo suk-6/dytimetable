@@ -20,8 +20,10 @@ class _TablePageState extends State<TablePage> {
   int _index = 0;
   String? classroom;
   String? mode;
+  String? selectedTeacher;
   late Future mealData = getMealData();
   late Future timetableData = getTimeTableData(null);
+  late Future teachersList = getTeachers();
 
   @override
   void initState() {
@@ -36,6 +38,7 @@ class _TablePageState extends State<TablePage> {
       setState(() {
         mode = value;
         mealData = getMealData();
+
       });
 
       if (mode == 'student') {
@@ -48,7 +51,8 @@ class _TablePageState extends State<TablePage> {
       } else if (mode == 'teacher') {
         setState(() {
           classroom = '교사';
-          timetableData = getTimeTableData(classroom);
+          selectedTeacher = getClassroomSync().toString().replaceAll('teacher-', '');
+          timetableData = getTimeTableData('teacher-$selectedTeacher');
         });
       }
     });
@@ -66,7 +70,11 @@ class _TablePageState extends State<TablePage> {
             onPressed: () {
               FirebaseAnalytics.instance.logEvent(name: "timetable_refresh");
               setState(() {
-                timetableData = getTimeTableData(classroom);
+                if (classroom == '교사') {
+                  timetableData = getTimeTableData('teacher-$selectedTeacher');
+                } else {
+                  timetableData = getTimeTableData(classroom);
+                }
               });
             },
           ),
@@ -131,6 +139,9 @@ class _TablePageState extends State<TablePage> {
                                 SizedBox(
                                     height: MediaQuery.of(context).size.height /
                                         50),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
                                 DropdownButton(
                                     value: classroom,
                                     items: generateClassroomList(true).map((e) {
@@ -142,10 +153,47 @@ class _TablePageState extends State<TablePage> {
                                     onChanged: (value) {
                                       setState(() {
                                         classroom = value;
+                                        if (classroom == '교사') {
+                                          selectedTeacher = getClassroomSync().toString().replaceAll('teacher-', '');
+                                          timetableData = getTimeTableData('teacher-$selectedTeacher');
+                                        } else {
                                         timetableData =
                                             getTimeTableData(classroom);
+                                        }
                                       });
                                     }),
+                                    if (mode == 'teacher' && classroom == '교사')
+                                      SizedBox(
+                                          width: MediaQuery.of(context).size.width /
+                                              20
+                                      ),
+                                if (mode == 'teacher' && classroom == '교사')
+                                  FutureBuilder(future: teachersList, builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData) {
+                                      return DropdownButton(
+                                          hint: const Text('선생님 선택'),
+                                          value: selectedTeacher == ''
+                                              ? null
+                                              : selectedTeacher,
+                                          items: List.generate(snapshot.data!.length - 1,
+                                                  (index) {
+                                                return DropdownMenuItem(
+                                                  value: (index + 1).toString(),
+                                                  child: Text(
+                                                      '${index + 1} ${snapshot.data![index + 1]}'),
+                                                );
+                                              }).toList(),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              selectedTeacher = value.toString();
+                                              timetableData = getTimeTableData('teacher-$selectedTeacher');
+                                            });
+                                          });
+                                    }
+                                    return const SizedBox();
+                                  }),
+                                  ],
+                                ),
                               ]);
                         } else if (snapshot.hasError) {
                           return Text("${snapshot.error}");

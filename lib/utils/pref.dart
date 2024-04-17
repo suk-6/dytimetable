@@ -26,6 +26,10 @@ Future<String?> getClassroom() async {
   return _prefs!.getString('classroom');
 }
 
+String? getClassroomSync() {
+  return _prefs!.getString('classroom');
+}
+
 Future<void> setISA(String key, String value) async {
   await _prefs!.setString(key, value);
 }

@@ -15,7 +15,7 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
   ];
   late String? urlClassroom;
 
-  if (classroom == null || classroom == '교사') {
+  if (classroom == null) {
     urlClassroom = (await getClassroom())?.replaceFirst('-', '/');
   } else {
     urlClassroom = classroom.replaceFirst('-', '/');
@@ -39,7 +39,7 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
           data[i][j]["teacher"] = data[i][j]["teacher"].substring(0, 2) + '...';
         }
 
-        if (await getMode() == 'teacher' && classroom == '교사') {
+        if (await getMode() == 'teacher' && urlClassroom.toString().lastIndexOf('teacher') == 0) {
           timetableData[j + 1][i + 1] =
               '${data[i][j]["subject"]}\n${data[i][j]["grade"]}-${data[i][j]["classroom"]}';
         } else {
