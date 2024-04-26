@@ -3,6 +3,7 @@ import 'package:dytimetable/utils/pref.dart';
 import "package:firebase_core/firebase_core.dart";
 import "package:dytimetable/firebase/firebase_options.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
+import "package:flutter_local_notifications/flutter_local_notifications.dart";
 
 Future<void> setupFirebase() async {
   await Firebase.initializeApp(
@@ -19,12 +20,39 @@ Future<void> setupFirebase() async {
     sound: true,
   );
 
+  await FlutterLocalNotificationsPlugin()
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(const AndroidNotificationChannel(
+          'high_importance_channel', 'High Importance Notifications',
+          importance: Importance.max));
+
   FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
   getToken();
 }
 
-Future<void> _onBackgroundMessage(RemoteMessage? message) async {}
+Future<void> _onBackgroundMessage(RemoteMessage message) async {
+  // if (message.data['type'] == 'period') {
+  //   flutterLocalNotificationsPlugin.show(
+  //       0,
+  //       message.data["title"],
+  //       message.data["body"],
+  //       const NotificationDetails(
+  //         android: AndroidNotificationDetails(
+  //           'high_importance_channel',
+  //           'High Importance Notifications',
+  //           importance: Importance.max,
+  //           priority: Priority.high,
+  //           showWhen: false,
+  //         ),
+  //       ),
+  //       payload: jsonEncode(message.data));
+  //   Future<void>.delayed(const Duration(seconds: 3), () {
+  //     flutterLocalNotificationsPlugin.cancel(0);
+  //   });
+  // }
+}
 
 Future<void> getToken() async {
   String? token;
