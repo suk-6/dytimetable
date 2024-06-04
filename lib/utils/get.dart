@@ -22,29 +22,32 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
   }
 
   final response = await http
-      .get(Uri.parse('https://timetable.dyhs.kr/getTable/$urlClassroom'));
+      .get(Uri.parse('https://timetable.dyhs.kr/v2/timetable/$urlClassroom'));
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-    for (int i = 0; i < 5; i++) {
-      for (int j = 0; j < 7; j++) {
-        if (data[i][j] == null) {
-          timetableData[j + 1][i + 1] = '';
+    for (int i = 1; i <= 5; i++) {
+      final weekday = data[i.toString()];
+      for (int j = 0; j < weekday.length; j++) {
+        final period = weekday[j];
+        if (period == null) {
+          timetableData[j + 1][i] = '';
           continue;
         }
 
-        data[i][j]["teacher"] = data[i][j]["teacher"].replaceAll('*', '');
+        period["teacher"] = period["teacher"].replaceAll('*', '');
 
-        if (data[i][j]["teacher"].length > 3) {
-          data[i][j]["teacher"] = data[i][j]["teacher"].substring(0, 2) + '...';
+        if (period["teacher"].length > 3) {
+          period["teacher"] = period["teacher"].substring(0, 2) + '...';
         }
 
-        if (await getMode() == 'teacher' && urlClassroom.toString().lastIndexOf('teacher') == 0) {
-          timetableData[j + 1][i + 1] =
-              '${data[i][j]["subject"]}\n${data[i][j]["grade"]}-${data[i][j]["classroom"]}';
+        if (await getMode() == 'teacher' &&
+            urlClassroom.toString().lastIndexOf('teacher') == 0) {
+          timetableData[j + 1][i] =
+              '${period["subject"]}\n${period["grade"]}-${period["class"]}';
         } else {
-          timetableData[j + 1][i + 1] =
-              '${data[i][j]["subject"]}\n${data[i][j]["teacher"]}';
+          timetableData[j + 1][i] =
+              '${period["subject"]}\n${period["teacher"]}${period["isChanged"] ? '@' : ''}';
         }
       }
     }
@@ -52,7 +55,7 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
     if (await getMode() == 'teacher') {
       timetableData[0][0] = '교사용';
     } else if (await getMode() == 'student') {
-      timetableData[0][0] = "${data[0][0]["grade"]}-${data[0][0]["class"]}";
+      timetableData[0][0] = classroom ?? '학생용';
     }
 
     return timetableData;
@@ -63,7 +66,7 @@ Future<List<List<String>>> getTimeTableData(String? classroom) async {
 
 Future<List<List<dynamic>>> getMealData() async {
   final response =
-      await http.get(Uri.parse('https://timetable.dyhs.kr/getmeal'));
+      await http.get(Uri.parse('https://timetable.dyhs.kr/v2/neis/meal'));
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
@@ -86,7 +89,7 @@ Future<List<List<dynamic>>> getMealData() async {
 Future<List<List<dynamic>>> getNoticeData() async {
   final urlClassroom = (await getClassroom())?.replaceFirst('-', '/');
   final response = await http
-      .get(Uri.parse('https://timetable.dyhs.kr/getnotice/$urlClassroom'));
+      .get(Uri.parse('https://timetable.dyhs.kr/v2/notice/$urlClassroom'));
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
@@ -109,8 +112,8 @@ Future<List<List<dynamic>>> getNoticeData() async {
 }
 
 Future<List<String>> getTeachers() async {
-  final response =
-      await http.get(Uri.parse('https://timetable.dyhs.kr/getTeachers'));
+  final response = await http
+      .get(Uri.parse('https://timetable.dyhs.kr/v2/timetable/teachers'));
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
