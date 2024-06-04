@@ -21,6 +21,7 @@ class _TablePageState extends State<TablePage> {
   String? classroom;
   String? mode;
   String? selectedTeacher;
+  bool isShowMoreMeal = false;
   late Future mealData = getMealData();
   late Future timetableData = getTimeTableData(null);
   late Future teachersList = getTeachers();
@@ -58,6 +59,25 @@ class _TablePageState extends State<TablePage> {
     });
 
     super.initState();
+  }
+
+  double _dragDistance = 0;
+
+  scrollNotification(notification) {
+    final containerExtent = notification.metrics.viewportDimension;
+    if (notification is ScrollStartNotification) {
+      _dragDistance = 0;
+    } else if (notification is OverscrollNotification) {
+      _dragDistance -= notification.overscroll;
+    } else if (notification is ScrollUpdateNotification) {
+      _dragDistance -= notification.scrollDelta!;
+    }
+    var percent = _dragDistance / (containerExtent);
+    if (percent <= -0.2) {
+      setState(() {
+        isShowMoreMeal = true;
+      });
+    }
   }
 
   @override
@@ -227,45 +247,91 @@ class _TablePageState extends State<TablePage> {
               future: mealData,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData && snapshot.data != []) {
-                  return RefreshIndicator(
-                      onRefresh: () async {
-                        FirebaseAnalytics.instance
-                            .logEvent(name: "meal_refresh");
-                        setState(() {
-                          mealData = getMealData();
-                        });
+                  return NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification notification) {
+                        scrollNotification(notification);
+                        return false;
                       },
-                      child: ListView(
-                        padding: const EdgeInsets.all(10),
-                        children: List.generate(snapshot.data.length, (index) {
-                          return Card(
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  title: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              200,
-                                          bottom: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              100),
-                                      child: Text(snapshot.data[index][1],
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold))),
-                                  subtitle: Text(
-                                      snapshot.data[index][2]
-                                          .toString()
-                                          .replaceAll(',', '\n'),
-                                      style: const TextStyle(fontSize: 15)),
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          FirebaseAnalytics.instance
+                              .logEvent(name: "meal_refresh");
+                          setState(() {
+                            mealData = getMealData();
+                            isShowMoreMeal = false;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: ListView(
+                                  children: List.generate(
+                                      isShowMoreMeal ? snapshot.data.length : 1,
+                                      (index) {
+                                    return Container(
+                                      width: 300,
+                                      height: snapshot.data[index][2]
+                                              .toString()
+                                              .contains('\n')
+                                          ? 200
+                                          : 80,
+                                      margin: const EdgeInsets.only(
+                                          left: 20, right: 20, bottom: 20),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 213, 212, 212),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 3,
+                                            blurRadius: 10,
+                                            offset: const Offset(3,
+                                                7), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 13, left: 20),
+                                            alignment: const Alignment(-1, 0),
+                                            child: Text(
+                                              snapshot.data[index][1],
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: "Pretendard",
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: double.maxFinite,
+                                            padding: const EdgeInsets.only(
+                                                top: 10, left: 20),
+                                            child: Text(
+                                              snapshot.data[index][2]
+                                                  .toString()
+                                                  .replaceAll(',', '\n'),
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontFamily: "Pretendard",
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
                                 ),
-                              ],
+                              ),
                             ),
-                          );
-                        }),
+                          ],
+                        ),
                       ));
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
