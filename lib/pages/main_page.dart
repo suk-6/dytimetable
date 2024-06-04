@@ -271,13 +271,10 @@ class _TablePageState extends State<TablePage> {
                                       (index) {
                                     return Container(
                                       width: 300,
-                                      height: snapshot.data[index][2]
-                                              .toString()
-                                              .contains('\n')
-                                          ? 200
-                                          : 80,
                                       margin: const EdgeInsets.only(
                                           left: 20, right: 20, bottom: 20),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 15),
                                       decoration: BoxDecoration(
                                         color: const Color.fromARGB(
                                             255, 213, 212, 212),
@@ -318,7 +315,7 @@ class _TablePageState extends State<TablePage> {
                                                   .toString()
                                                   .replaceAll(',', '\n'),
                                               style: const TextStyle(
-                                                  fontSize: 12,
+                                                  fontSize: 14,
                                                   fontFamily: "Pretendard",
                                                   fontWeight: FontWeight.w300),
                                             ),
