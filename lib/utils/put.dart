@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 Future<String> sendNotice(
     String title, String content, String password, String classroom) async {
   final response = await http.post(
-    Uri.parse('https://timetable.dyhs.kr/sendnotice'),
+    Uri.parse('https://timetable.dyhs.kr/v2/notice'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
@@ -24,7 +24,7 @@ Future<String> sendNotice(
 
 Future<bool> checkPassword(String password) async {
   final response = await http.post(
-    Uri.parse('https://timetable.dyhs.kr/checkpassword'),
+    Uri.parse('https://timetable.dyhs.kr/v2/checkpassword'),
     headers: <String, String>{
       'Content-Type': 'application/json',
     },
