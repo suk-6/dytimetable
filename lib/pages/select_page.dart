@@ -183,7 +183,9 @@ class _SelectPageState extends State<SelectPage> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const TablePage()),
+                                                      const TablePage(
+                                                        selectedTabIndex: 0,
+                                                      )),
                                               (route) => false));
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -254,7 +256,10 @@ class _SelectPageState extends State<SelectPage> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            const TablePage()),
+                                                            const TablePage(
+                                                              selectedTabIndex:
+                                                                  0,
+                                                            )),
                                                     (route) => false));
                                       } else {
                                         ScaffoldMessenger.of(context)
