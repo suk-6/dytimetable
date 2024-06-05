@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class TablePage extends StatefulWidget {
-  const TablePage({super.key});
+  final int selectedTabIndex;
+  const TablePage({super.key, required this.selectedTabIndex});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -28,6 +29,7 @@ class _TablePageState extends State<TablePage> {
 
   @override
   void initState() {
+    _index = widget.selectedTabIndex;
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       final snackBar = SnackBar(
           content: Text(
