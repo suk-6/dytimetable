@@ -49,6 +49,13 @@ class _MyAppState extends State<MyApp> {
           context, MaterialPageRoute(builder: (context) => const AlertPage()));
     } else if (message.data['click_action'] == 'url') {
       launchUrl(Uri.parse(message.data['data']!));
+    } else if (message.data['click_action'] == 'meal') {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const TablePage(
+                    selectedTabIndex: 1,
+                  )));
     }
   }
 
@@ -114,7 +121,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: isOnboardingDone ? const TablePage() : const OnboardingPage(),
+      home: isOnboardingDone
+          ? const TablePage(
+              selectedTabIndex: 0,
+            )
+          : const OnboardingPage(),
       theme: ThemeData(fontFamily: "Pretendard"),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)
