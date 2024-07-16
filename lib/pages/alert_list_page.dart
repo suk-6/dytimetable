@@ -1,5 +1,3 @@
-import 'package:dytimetable/pages/alert_send_page.dart';
-import 'package:dytimetable/pages/alert_view_page.dart';
 import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
