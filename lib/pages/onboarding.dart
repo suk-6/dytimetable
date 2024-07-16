@@ -1,7 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:dytimetable/pages/select_page.dart';
+import 'package:get/route_manager.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -16,10 +17,7 @@ class OnboardingPage extends StatelessWidget {
           icon: const Icon(Icons.close),
           onPressed: () {
             FirebaseAnalytics.instance.logTutorialComplete();
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const SelectPage()),
-                (route) => false);
+            Get.offAllNamed('/select');
           },
         )
       ]),

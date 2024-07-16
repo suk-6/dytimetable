@@ -1,11 +1,10 @@
-import 'package:dytimetable/pages/alert_list_page.dart';
 import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
-import 'package:dytimetable/pages/setting_page.dart';
 import 'package:dytimetable/utils/tools.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 // ignore: must_be_immutable
 class TablePage extends StatefulWidget {
@@ -37,27 +36,31 @@ class _TablePageState extends State<TablePage> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
 
-    getMode().then((value) {
-      setState(() {
-        mode = value;
-        mealData = getMealData();
-      });
-
-      if (mode == 'student') {
-        getClassroom().then((String? classroomData) {
-          setState(() {
-            classroom = classroomData;
-            timetableData = getTimeTableData(classroom);
-          });
-        });
-      } else if (mode == 'teacher') {
+    migrateData().then((value) {
+      getMode().then((value) {
         setState(() {
-          classroom = '교사';
-          selectedTeacher =
-              getClassroomSync().toString().replaceAll('teacher-', '');
-          timetableData = getTimeTableData('teacher-$selectedTeacher');
+          mode = value;
+          debugPrint(mode);
+          if (mode == null) {
+            Get.offAllNamed('/onboarding');
+          } else if (mode == 'student') {
+            getClassroom().then((String? classroomData) {
+              setState(() {
+                classroom = classroomData;
+                timetableData = getTimeTableData(classroom);
+              });
+            });
+          } else if (mode == 'teacher') {
+            setState(() {
+              classroom = '교사';
+              selectedTeacher =
+                  getClassroomSync().toString().replaceAll('teacher-', '');
+              timetableData = getTimeTableData('teacher-$selectedTeacher');
+            });
+          }
+          mealData = getMealData();
         });
-      }
+      });
     });
 
     super.initState();
@@ -103,15 +106,13 @@ class _TablePageState extends State<TablePage> {
         IconButton(
           icon: const Icon(Icons.notifications),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const AlertPage()));
+            Get.toNamed('/alert');
           },
         ),
         IconButton(
           icon: const Icon(Icons.settings),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SettingPage()));
+            Get.toNamed('/settings');
           },
         )
       ]),

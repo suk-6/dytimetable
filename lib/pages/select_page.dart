@@ -1,8 +1,8 @@
-import 'package:dytimetable/pages/main_page.dart';
 import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/utils/put.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import '../firebase/firebase_setup.dart';
 import 'package:dytimetable/utils/get.dart';
 
@@ -167,26 +167,21 @@ class _SelectPageState extends State<SelectPage> {
                                   subscribeToTopic(
                                           '$selectedGrade-$selectedClass')
                                       .then((value) {
-                                        setMode('student');
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text('설정이 완료되었습니다.'),
-                                          ),
-                                        );
-                                      })
-                                      .then((value) => setState(() {
-                                            isLoading = false;
-                                          }))
-                                      .then((value) =>
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const TablePage(
-                                                        selectedTabIndex: 0,
-                                                      )),
-                                              (route) => false));
+                                    setMode('student')
+                                        .then((value) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text('설정이 완료되었습니다.'),
+                                            ),
+                                          );
+                                        })
+                                        .then((value) => setState(() {
+                                              isLoading = false;
+                                            }))
+                                        .then((value) =>
+                                            Get.offAllNamed('/table'));
+                                  });
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -252,15 +247,7 @@ class _SelectPageState extends State<SelectPage> {
                                                   isLoading = false;
                                                 }))
                                             .then((value) =>
-                                                Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const TablePage(
-                                                              selectedTabIndex:
-                                                                  0,
-                                                            )),
-                                                    (route) => false));
+                                                Get.offAllNamed('/table'));
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(

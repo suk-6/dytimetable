@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class AlertViewPage extends StatelessWidget {
-  final List<dynamic> data;
-  const AlertViewPage(this.data, {super.key});
+  const AlertViewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List data = Get.arguments;
     return Scaffold(
         appBar: AppBar(),
         body: Container(

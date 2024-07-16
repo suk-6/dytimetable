@@ -4,6 +4,7 @@ import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class AlertPage extends StatefulWidget {
   const AlertPage({super.key});
@@ -40,9 +41,7 @@ class _AlertPageState extends State<AlertPage> {
               IconButton(
                 icon: const Icon(Icons.send),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const AlertSendPage();
-                  }));
+                  Get.toNamed('/alert-send');
                 },
               ),
           ],
@@ -71,11 +70,8 @@ class _AlertPageState extends State<AlertPage> {
                                   onTap: () {
                                     FirebaseAnalytics.instance
                                         .logEvent(name: "click_alert_in_list");
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return AlertViewPage(
-                                          snapshot.data[index]);
-                                    }));
+                                    Get.toNamed('/alert/view',
+                                        arguments: snapshot.data[index]);
                                   },
                                   child: Card(
                                     elevation: 2,
