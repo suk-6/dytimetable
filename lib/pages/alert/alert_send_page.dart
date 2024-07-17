@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:dytimetable/utils/put.dart';
 import 'package:dytimetable/utils/tools.dart';
-import 'package:flutter/material.dart';
 
 class AlertSendPage extends StatefulWidget {
   const AlertSendPage({super.key});

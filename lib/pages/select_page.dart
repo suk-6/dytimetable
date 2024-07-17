@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/route_manager.dart';
+
 import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/utils/put.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import '../firebase/firebase_setup.dart';
 import 'package:dytimetable/utils/get.dart';
+
+import 'package:dytimetable/firebase/firebase_setup.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class SelectPage extends StatefulWidget {
   const SelectPage({super.key});

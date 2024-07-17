@@ -1,5 +1,6 @@
-import 'package:dytimetable/utils/pref.dart';
 import 'package:flutter/material.dart';
+
+import 'package:dytimetable/utils/pref.dart';
 
 List<String> generateClassroomList(bool addTeacher) {
   List<String> classroomList = [];

@@ -1,4 +1,3 @@
-import 'package:dytimetable/pages/alert/alert_view_page.dart';
 import "package:flutter/material.dart";
 
 import 'package:dytimetable/utils/pref.dart';
@@ -7,12 +6,13 @@ import 'package:dytimetable/utils/check_update.dart';
 import 'package:get/route_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:dytimetable/pages/main_page.dart';
 import 'package:dytimetable/pages/onboarding.dart';
 import 'package:dytimetable/pages/setting_page.dart';
 import 'package:dytimetable/pages/alert/alert_list_page.dart';
+import 'package:dytimetable/pages/alert/alert_view_page.dart';
 import 'package:dytimetable/pages/alert/alert_send_page.dart';
 import 'package:dytimetable/pages/select_page.dart';
-import 'package:dytimetable/pages/main_page.dart';
 
 import 'package:dytimetable/firebase/firebase_setup.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -72,24 +72,15 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       getPages: [
+        GetPage(name: '/', page: () => const MainPage()),
         GetPage(name: '/onboarding', page: () => const OnboardingPage()),
         GetPage(name: '/select', page: () => const SelectPage()),
-        GetPage(
-            name: '/table',
-            page: () => const TablePage(
-                  selectedTabIndex: 0,
-                )),
-        GetPage(
-            name: '/meal',
-            page: () => const TablePage(
-                  selectedTabIndex: 1,
-                )),
         GetPage(name: '/alert', page: () => const AlertPage()),
         GetPage(name: '/alert-send', page: () => const AlertSendPage()),
         GetPage(name: '/alert-view', page: () => const AlertViewPage()),
         GetPage(name: '/settings', page: () => const SettingPage()),
       ],
-      initialRoute: '/table',
+      initialRoute: '/',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "Pretendard"),
       navigatorObservers: [

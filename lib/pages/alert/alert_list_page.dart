@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/route_manager.dart';
+
 import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 
 class AlertPage extends StatefulWidget {
   const AlertPage({super.key});

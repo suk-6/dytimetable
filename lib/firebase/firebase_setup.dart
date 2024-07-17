@@ -1,9 +1,12 @@
 import "package:flutter/foundation.dart";
+
 import 'package:dytimetable/utils/pref.dart';
+
+import "package:flutter_local_notifications/flutter_local_notifications.dart";
+
 import "package:firebase_core/firebase_core.dart";
 import "package:dytimetable/firebase/firebase_options.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
-import "package:flutter_local_notifications/flutter_local_notifications.dart";
 
 Future<void> setupFirebase() async {
   await Firebase.initializeApp(
