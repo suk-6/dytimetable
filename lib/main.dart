@@ -5,13 +5,13 @@ import 'package:dytimetable/utils/check_update.dart';
 
 import 'package:get/route_manager.dart';
 
-import 'package:dytimetable/pages/main_page.dart';
-import 'package:dytimetable/pages/onboarding.dart';
-import 'package:dytimetable/pages/setting_page.dart';
+import 'package:dytimetable/pages/main/main_page.dart';
+import 'package:dytimetable/pages/settings/onboarding.dart';
+import 'package:dytimetable/pages/settings/setting_page.dart';
 import 'package:dytimetable/pages/alert/alert_list_page.dart';
 import 'package:dytimetable/pages/alert/alert_view_page.dart';
 import 'package:dytimetable/pages/alert/alert_send_page.dart';
-import 'package:dytimetable/pages/select_page.dart';
+import 'package:dytimetable/pages/settings/select_page.dart';
 
 import 'package:dytimetable/firebase/firebase.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';

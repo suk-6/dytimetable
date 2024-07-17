@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:dytimetable/pages/meal_page.dart';
-import 'package:dytimetable/pages/table_page.dart';
+import 'package:dytimetable/pages/main/meal_page.dart';
+import 'package:dytimetable/pages/main/table_page.dart';
 
 import 'package:dytimetable/widgets/bottom_navigation_bar_widget.dart';
 
