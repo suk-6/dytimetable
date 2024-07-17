@@ -6,6 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
+import 'widgets/bottom_navigation_bar_widget.dart';
+
 // ignore: must_be_immutable
 class TablePage extends StatefulWidget {
   final int selectedTabIndex;
@@ -338,20 +340,10 @@ class _TablePageState extends State<TablePage> {
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
-              }),
-      bottomNavigationBar: BottomNavigationBar(
+              },
+            ),
+      bottomNavigationBar: MyBottomNavigationBar(
         currentIndex: _index,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.table_chart_outlined),
-            label: '시간표',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.rice_bowl_sharp),
-            label: '급식',
-          ),
-        ],
-        selectedItemColor: Colors.amber[800],
         onTap: (index) {
           switch (index) {
             case 0:
