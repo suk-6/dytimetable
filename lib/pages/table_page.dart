@@ -21,11 +21,12 @@ class TablePage extends StatefulWidget {
 }
 
 class _TablePageState extends State<TablePage> {
+  String? grade;
   String? classroom;
   String? mode;
   String? selectedTeacher;
-  late Future timetableData = getTimeTableData(null);
   late Future teachersList = getTeachers();
+  late Future timetableData = getTimeTableData(null);
 
   @override
   void initState() {
@@ -46,13 +47,14 @@ class _TablePageState extends State<TablePage> {
           } else if (mode == 'student') {
             getClassroom().then((String? classroomData) {
               setState(() {
-                classroom = classroomData;
-                timetableData = getTimeTableData(classroom);
+                grade = classroomData?.split('-')[0];
+                classroom = classroomData?.split('-')[1];
+                timetableData = getTimeTableData(classroomData);
               });
             });
           } else if (mode == 'teacher') {
             setState(() {
-              classroom = '교사';
+              grade = '교사';
               selectedTeacher =
                   getClassroomSync().toString().replaceAll('teacher-', '');
               timetableData = getTimeTableData('teacher-$selectedTeacher');
@@ -74,10 +76,10 @@ class _TablePageState extends State<TablePage> {
           onPressed: () {
             FirebaseAnalytics.instance.logEvent(name: "timetable_refresh");
             setState(() {
-              if (classroom == '교사') {
+              if (grade == '교사') {
                 timetableData = getTimeTableData('teacher-$selectedTeacher');
               } else {
-                timetableData = getTimeTableData(classroom);
+                timetableData = getTimeTableData('$grade-$classroom');
               }
             });
           },
@@ -96,7 +98,86 @@ class _TablePageState extends State<TablePage> {
         )
       ]),
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Row(
+            children: [
+              SizedBox(width: MediaQuery.of(context).size.width / 30),
+              DropdownButton(
+                  value: grade,
+                  items: List.generate(mode == 'teacher' ? 4 : 3, (i) {
+                    if (i == 3) {
+                      return const DropdownMenuItem(
+                        value: '교사',
+                        child: Text('교사'),
+                      );
+                    }
+
+                    String index = (i + 1).toString();
+                    return DropdownMenuItem(
+                      value: index,
+                      child: Text('$index학년'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      if (grade == '교사') classroom = '1';
+                      grade = value;
+                      if (grade == '교사') {
+                        selectedTeacher = getClassroomSync()
+                            .toString()
+                            .replaceAll('teacher-', '');
+                        timetableData =
+                            getTimeTableData('teacher-$selectedTeacher');
+                      } else {
+                        timetableData = getTimeTableData('$grade-$classroom');
+                      }
+                    });
+                  }),
+              SizedBox(width: MediaQuery.of(context).size.width / 30),
+              grade == '교사'
+                  ? FutureBuilder(
+                      future: teachersList,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          return DropdownButton(
+                              value: selectedTeacher,
+                              items:
+                                  List.generate(snapshot.data!.length - 1, (i) {
+                                int index = i + 1;
+                                return DropdownMenuItem(
+                                  value: index.toString(),
+                                  child:
+                                      Text('$index ${snapshot.data![index]}'),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedTeacher = value.toString();
+                                  timetableData = getTimeTableData(
+                                      'teacher-$selectedTeacher');
+                                });
+                              });
+                        }
+                        return const SizedBox();
+                      })
+                  : DropdownButton(
+                      value: classroom,
+                      items: List.generate(10, (i) {
+                        String index = (i + 1).toString();
+                        return DropdownMenuItem(
+                          value: index,
+                          child: Text('$index반'),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          classroom = value;
+                          timetableData = getTimeTableData('$grade-$classroom');
+                        });
+                      })
+            ],
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height / 200),
           FutureBuilder(
             future: timetableData,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -133,66 +214,6 @@ class _TablePageState extends State<TablePage> {
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height / 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          DropdownButton(
-                              value: classroom,
-                              items: generateClassroomList(true).map((e) {
-                                return DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  classroom = value;
-                                  if (classroom == '교사') {
-                                    selectedTeacher = getClassroomSync()
-                                        .toString()
-                                        .replaceAll('teacher-', '');
-                                    timetableData = getTimeTableData(
-                                        'teacher-$selectedTeacher');
-                                  } else {
-                                    timetableData = getTimeTableData(classroom);
-                                  }
-                                });
-                              }),
-                          if (mode == 'teacher' && classroom == '교사')
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width / 20),
-                          if (mode == 'teacher' && classroom == '교사')
-                            FutureBuilder(
-                                future: teachersList,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshot) {
-                                  if (snapshot.hasData) {
-                                    return DropdownButton(
-                                        hint: const Text('선생님 선택'),
-                                        value: selectedTeacher == ''
-                                            ? null
-                                            : selectedTeacher,
-                                        items: List.generate(
-                                            snapshot.data!.length - 1, (index) {
-                                          return DropdownMenuItem(
-                                            value: (index + 1).toString(),
-                                            child: Text(
-                                                '${index + 1} ${snapshot.data![index + 1]}'),
-                                          );
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedTeacher = value.toString();
-                                            timetableData = getTimeTableData(
-                                                'teacher-$selectedTeacher');
-                                          });
-                                        });
-                                  }
-                                  return const SizedBox();
-                                }),
-                        ],
                       ),
                     ]);
               } else if (snapshot.hasError) {
