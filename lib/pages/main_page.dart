@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:firebase_analytics/firebase_analytics.dart';
-
 import 'package:dytimetable/pages/meal_page.dart';
 import 'package:dytimetable/pages/table_page.dart';
 
