@@ -8,7 +8,7 @@ import 'package:dytimetable/utils/get.dart';
 
 import 'package:dytimetable/widgets/circular_indicator_widget.dart';
 
-import 'package:dytimetable/firebase/firebase_setup.dart';
+import 'package:dytimetable/firebase/firebase.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 class SelectPage extends StatefulWidget {

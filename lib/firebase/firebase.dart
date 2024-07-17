@@ -1,5 +1,8 @@
 import "package:flutter/foundation.dart";
 
+import "package:get/route_manager.dart";
+import "package:url_launcher/url_launcher.dart";
+
 import 'package:dytimetable/utils/pref.dart';
 
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
@@ -55,6 +58,16 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
   //     flutterLocalNotificationsPlugin.cancel(0);
   //   });
   // }
+}
+
+void handleMessage(RemoteMessage message) {
+  if (message.data['click_action'] == 'notice') {
+    Get.toNamed('/alert');
+  } else if (message.data['click_action'] == 'url') {
+    launchUrl(Uri.parse(message.data['data']!));
+  } else if (message.data['click_action'] == 'meal') {
+    Get.toNamed('/meal');
+  }
 }
 
 Future<void> getToken() async {

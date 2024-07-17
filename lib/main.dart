@@ -4,7 +4,6 @@ import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/utils/check_update.dart';
 
 import 'package:get/route_manager.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:dytimetable/pages/main_page.dart';
 import 'package:dytimetable/pages/onboarding.dart';
@@ -14,7 +13,7 @@ import 'package:dytimetable/pages/alert/alert_view_page.dart';
 import 'package:dytimetable/pages/alert/alert_send_page.dart';
 import 'package:dytimetable/pages/select_page.dart';
 
-import 'package:dytimetable/firebase/firebase_setup.dart';
+import 'package:dytimetable/firebase/firebase.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -38,27 +37,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late bool isOnboardingDone = false;
-
   Future<void> setupInteractedMessage() async {
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      _handleMessage(initialMessage);
+      handleMessage(initialMessage);
     }
 
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  }
-
-  void _handleMessage(RemoteMessage message) {
-    if (message.data['click_action'] == 'notice') {
-      Get.toNamed('/alert');
-    } else if (message.data['click_action'] == 'url') {
-      launchUrl(Uri.parse(message.data['data']!));
-    } else if (message.data['click_action'] == 'meal') {
-      Get.toNamed('/meal');
-    }
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   }
 
   @override
