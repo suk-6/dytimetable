@@ -6,6 +6,8 @@ import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/utils/put.dart';
 import 'package:dytimetable/utils/get.dart';
 
+import 'package:dytimetable/widgets/circular_indicator_widget.dart';
+
 import 'package:dytimetable/firebase/firebase_setup.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
@@ -156,7 +158,7 @@ class _SelectPageState extends State<SelectPage> {
                       ),
                       const SizedBox(height: 20),
                       isLoading
-                          ? const CircularProgressIndicator()
+                          ? const MyCircularProgressIndicator()
                           : ElevatedButton(
                               onPressed: () {
                                 if (selectedGrade != '' &&
@@ -224,7 +226,7 @@ class _SelectPageState extends State<SelectPage> {
                                 }),
                             const SizedBox(height: 20),
                             isLoading
-                                ? const CircularProgressIndicator()
+                                ? const MyCircularProgressIndicator()
                                 : ElevatedButton(
                                     onPressed: () {
                                       if (selectedTeacher != '') {
@@ -267,7 +269,7 @@ class _SelectPageState extends State<SelectPage> {
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
                       } else {
-                        return const CircularProgressIndicator();
+                        return const MyCircularProgressIndicator();
                       }
                     })));
   }

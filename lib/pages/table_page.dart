@@ -6,6 +6,8 @@ import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/utils/tools.dart';
 
+import 'package:dytimetable/widgets/circular_indicator_widget.dart';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -196,7 +198,7 @@ class _TablePageState extends State<TablePage> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               } else {
-                return const CircularProgressIndicator();
+                return const MyCircularProgressIndicator();
               }
             },
           )

@@ -5,6 +5,8 @@ import 'package:get/route_manager.dart';
 import 'package:dytimetable/utils/get.dart';
 import 'package:dytimetable/utils/pref.dart';
 
+import 'package:dytimetable/widgets/circular_indicator_widget.dart';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AlertPage extends StatefulWidget {
@@ -52,7 +54,7 @@ class _AlertPageState extends State<AlertPage> {
             builder: (context, snapshot) {
               FirebaseAnalytics.instance.logEvent(name: "alert_page");
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: MyCircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return const Center(child: Text('오류가 발생했습니다.'));
               } else {

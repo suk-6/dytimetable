@@ -4,6 +4,8 @@ import 'package:get/route_manager.dart';
 
 import 'package:dytimetable/utils/get.dart';
 
+import 'package:dytimetable/widgets/circular_indicator_widget.dart';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -159,7 +161,7 @@ class _MealPageState extends State<MealPage> {
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: MyCircularProgressIndicator());
           }
         },
       ),
