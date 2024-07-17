@@ -1,4 +1,4 @@
-import 'package:dytimetable/pages/alert_view_page.dart';
+import 'package:dytimetable/pages/alert/alert_view_page.dart';
 import "package:flutter/material.dart";
 
 import 'package:dytimetable/utils/pref.dart';
@@ -9,8 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:dytimetable/pages/onboarding.dart';
 import 'package:dytimetable/pages/setting_page.dart';
-import 'package:dytimetable/pages/alert_list_page.dart';
-import 'package:dytimetable/pages/alert_send_page.dart';
+import 'package:dytimetable/pages/alert/alert_list_page.dart';
+import 'package:dytimetable/pages/alert/alert_send_page.dart';
 import 'package:dytimetable/pages/select_page.dart';
 import 'package:dytimetable/pages/main_page.dart';
 
@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
                 )),
         GetPage(name: '/alert', page: () => const AlertPage()),
         GetPage(name: '/alert-send', page: () => const AlertSendPage()),
-        GetPage(name: '/alert/view', page: () => const AlertViewPage()),
+        GetPage(name: '/alert-view', page: () => const AlertViewPage()),
         GetPage(name: '/settings', page: () => const SettingPage()),
       ],
       initialRoute: '/table',
