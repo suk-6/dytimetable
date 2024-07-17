@@ -29,14 +29,6 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: MyBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
-          switch (index) {
-            case 0:
-              FirebaseAnalytics.instance.logEvent(name: "timetable_page");
-              break;
-            case 1:
-              FirebaseAnalytics.instance.logEvent(name: "meal_page");
-              break;
-          }
           setState(() {
             _currentIndex = index;
           });

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
@@ -11,7 +12,17 @@ class MyBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: onTap,
+      onTap: (index) {
+        switch (index) {
+          case 0:
+            FirebaseAnalytics.instance.logEvent(name: "timetable_page");
+            break;
+          case 1:
+            FirebaseAnalytics.instance.logEvent(name: "meal_page");
+            break;
+        }
+        onTap(index);
+      },
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.table_chart_outlined),
