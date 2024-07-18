@@ -1,3 +1,4 @@
+import 'package:dytimetable/theme.dart';
 import "package:flutter/material.dart";
 
 import 'package:dytimetable/utils/pref.dart';
@@ -8,6 +9,7 @@ import 'package:get/route_manager.dart';
 import 'package:dytimetable/pages/main/main_page.dart';
 import 'package:dytimetable/pages/settings/onboarding.dart';
 import 'package:dytimetable/pages/settings/setting_page.dart';
+import 'package:dytimetable/pages/settings/teacher_select_page.dart';
 import 'package:dytimetable/pages/alert/alert_list_page.dart';
 import 'package:dytimetable/pages/alert/alert_view_page.dart';
 import 'package:dytimetable/pages/alert/alert_send_page.dart';
@@ -62,6 +64,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/', page: () => const MainPage()),
         GetPage(name: '/onboarding', page: () => const OnboardingPage()),
         GetPage(name: '/select', page: () => const SelectPage()),
+        GetPage(name: '/select-teacher', page: () => const TeacherSelectPage()),
         GetPage(name: '/alert', page: () => const AlertPage()),
         GetPage(name: '/alert-send', page: () => const AlertSendPage()),
         GetPage(name: '/alert-view', page: () => const AlertViewPage()),
@@ -69,7 +72,8 @@ class _MyAppState extends State<MyApp> {
       ],
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: "Pretendard"),
+      theme: initThemeData(brightness: Brightness.light),
+      darkTheme: initThemeData(brightness: Brightness.dark),
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)
       ],
