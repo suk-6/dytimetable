@@ -25,9 +25,7 @@ Future<void> main() async {
   await initSharedPreferences();
   FirebaseAnalytics.instance.logAppOpen();
 
-  runApp(const MaterialApp(
-    home: MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
