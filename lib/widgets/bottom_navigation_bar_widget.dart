@@ -34,8 +34,7 @@ class MyBottomNavigationBar extends StatelessWidget {
           label: '급식',
         ),
       ],
-      selectedItemColor:
-          Colors.amber[800], // TODO: Select the selectedItemColor
+      selectedItemColor: const Color(0xFFF8B757),
     );
   }
 }
