@@ -105,13 +105,17 @@ class _MealPageState extends State<MealPage> {
                                     left: 20, right: 20, bottom: 20),
                                 padding: const EdgeInsets.only(bottom: 15),
                                 decoration: BoxDecoration(
-                                  color:
-                                      const Color.fromARGB(255, 213, 212, 212),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.4),
                                       spreadRadius: 3,
                                       blurRadius: 10,
                                       offset: const Offset(
@@ -129,7 +133,7 @@ class _MealPageState extends State<MealPage> {
                                       child: Text(
                                         snapshot.data[index][1],
                                         style: const TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 18,
                                             fontFamily: "Pretendard",
                                             fontWeight: FontWeight.w300),
                                       ),
