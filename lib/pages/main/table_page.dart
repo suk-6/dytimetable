@@ -1,3 +1,4 @@
+import 'package:dytimetable/widgets/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/route_manager.dart';
@@ -101,21 +102,22 @@ class _TablePageState extends State<TablePage> {
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Row(
             children: [
-              SizedBox(width: MediaQuery.of(context).size.width / 30),
-              DropdownButton(
+              MyDropdownBox(
+                  width: 80,
+                  hint: '학년',
                   value: grade,
                   items: List.generate(mode == 'teacher' ? 4 : 3, (i) {
                     if (i == 3) {
-                      return const DropdownMenuItem(
+                      return (
                         value: '교사',
-                        child: Text('교사'),
+                        child: '교사',
                       );
                     }
 
                     String index = (i + 1).toString();
-                    return DropdownMenuItem(
+                    return (
                       value: index,
-                      child: Text('$index학년'),
+                      child: '$index학년',
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -133,21 +135,21 @@ class _TablePageState extends State<TablePage> {
                       }
                     });
                   }),
-              SizedBox(width: MediaQuery.of(context).size.width / 30),
               grade == '교사'
                   ? FutureBuilder(
                       future: teachersList,
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.hasData) {
-                          return DropdownButton(
+                          return MyDropdownBox(
+                              width: 100,
+                              hint: '교사',
                               value: selectedTeacher,
                               items:
                                   List.generate(snapshot.data!.length - 1, (i) {
                                 int index = i + 1;
-                                return DropdownMenuItem(
+                                return (
                                   value: index.toString(),
-                                  child:
-                                      Text('$index ${snapshot.data![index]}'),
+                                  child: '$index ${snapshot.data![index]}',
                                 );
                               }).toList(),
                               onChanged: (value) {
@@ -160,13 +162,15 @@ class _TablePageState extends State<TablePage> {
                         }
                         return const SizedBox();
                       })
-                  : DropdownButton(
+                  : MyDropdownBox(
+                      width: 80,
+                      hint: '반',
                       value: classroom,
                       items: List.generate(10, (i) {
                         String index = (i + 1).toString();
-                        return DropdownMenuItem(
+                        return (
                           value: index,
-                          child: Text('$index반'),
+                          child: '$index반',
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -177,7 +181,7 @@ class _TablePageState extends State<TablePage> {
                       })
             ],
           ),
-          SizedBox(height: MediaQuery.of(context).size.height / 200),
+          const SizedBox(height: 2),
           FutureBuilder(
             future: timetableData,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -199,7 +203,7 @@ class _TablePageState extends State<TablePage> {
                                 color: checkDay(index, subIndex) |
                                         snapshot.data![index][subIndex]
                                             .contains('@')
-                                    ? Colors.yellow
+                                    ? Theme.of(context).colorScheme.primary
                                     : null,
                                 child: Text(
                                   snapshot.data![index][subIndex]
@@ -219,7 +223,8 @@ class _TablePageState extends State<TablePage> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               } else {
-                return const MyCircularProgressIndicator();
+                return const Expanded(
+                    child: Center(child: MyCircularProgressIndicator()));
               }
             },
           )
