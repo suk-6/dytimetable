@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 import 'package:dytimetable/utils/pref.dart';
 import 'package:dytimetable/utils/put.dart';
-import 'package:dytimetable/utils/get.dart';
 
 import 'package:dytimetable/widgets/circular_indicator_widget.dart';
+import 'package:dytimetable/widgets/dropdown_widget.dart';
 
 import 'package:dytimetable/firebase/firebase.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -20,20 +21,11 @@ class SelectPage extends StatefulWidget {
 }
 
 class _SelectPageState extends State<SelectPage> {
-  String preMode = 'student';
-  late String selectedTeacher = '';
   late String selectedGrade = '';
   late String selectedClass = '';
   late String password = '';
   bool isLoading = false;
-
-  late Future teachers = getTeachers();
-
-  @override
-  void initState() {
-    teachers = getTeachers();
-    super.initState();
-  }
+  bool isAvailable = false;
 
   Future<void> dialog() {
     return showDialog(
@@ -75,7 +67,6 @@ class _SelectPageState extends State<SelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(preMode == 'student' ? '시간표 알림 설정하기' : '교사 설정하기'),
           actions: [
             IconButton(
               icon: const Icon(Icons.compare_arrows),
@@ -83,194 +74,158 @@ class _SelectPageState extends State<SelectPage> {
                 setState(() {
                   password = '';
                 });
-                if (preMode == 'student') {
-                  dialog().then((value) {
-                    checkPassword(password).then((value) {
-                      if (value) {
-                        setState(() {
-                          preMode = 'teacher';
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('교사 모드로 전환되었습니다.'),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('비밀번호가 틀렸습니다.'),
-                          ),
-                        );
-                      }
-                    });
+
+                dialog().then((value) {
+                  checkPassword(password).then((value) {
+                    if (value) {
+                      Get.toNamed('/select-teacher');
+                    } else {
+                      ScaffoldMessenger.of(context).showMaterialBanner(
+                        MaterialBanner(
+                          content: const Text('비밀번호가 틀렸습니다.'),
+                          actions: [
+                            TextButton(
+                                child: const Text('확인'),
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentMaterialBanner();
+                                }),
+                          ],
+                        ),
+                      );
+                    }
                   });
-                } else {
-                  setState(() {
-                    preMode = 'student';
-                  });
-                }
+                });
               },
             ),
           ],
         ),
-        body: Center(
-            child: preMode == 'student'
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          DropdownButton<String>(
-                            hint: const Text('학년 선택'),
-                            value: selectedGrade == '' ? null : selectedGrade,
-                            onChanged: (String? value) {
-                              setState(() {
-                                selectedGrade = value!;
-                              });
-                            },
-                            items: List.generate(3, (index) => index + 1)
-                                .map((int value) {
-                              return DropdownMenuItem<String>(
-                                value: value.toString(),
-                                child: Text('$value학년'),
-                              );
-                            }).toList(),
-                          ),
-                          const SizedBox(width: 20),
-                          DropdownButton<String>(
-                            hint: const Text('반 선택'),
-                            value: selectedClass == '' ? null : selectedClass,
-                            onChanged: (String? value) {
-                              setState(() {
-                                selectedClass = value!;
-                              });
-                            },
-                            items: List.generate(10, (index) => index + 1)
-                                .map((int value) {
-                              return DropdownMenuItem<String>(
-                                value: value.toString(),
-                                child: Text('$value반'),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      isLoading
-                          ? const MyCircularProgressIndicator()
-                          : ElevatedButton(
-                              onPressed: () {
-                                if (selectedGrade != '' &&
-                                    selectedClass != '') {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  FirebaseAnalytics.instance.logSelectContent(
-                                      contentType: 'select_classroom',
-                                      itemId: '$selectedGrade-$selectedClass');
-                                  subscribeToTopic(
-                                          '$selectedGrade-$selectedClass')
-                                      .then((value) {
-                                    setMode('student')
-                                        .then((value) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text('설정이 완료되었습니다.'),
-                                            ),
-                                          );
-                                        })
-                                        .then((value) => setState(() {
-                                              isLoading = false;
-                                            }))
-                                        .then((value) =>
-                                            Get.offAllNamed('/table'));
-                                  });
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('학년과 반을 선택해주세요.'),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: const Text('설정하기'),
-                            ),
-                    ],
-                  )
-                : FutureBuilder(
-                    future: teachers,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasData) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            DropdownButton(
-                                hint: const Text('선생님 선택'),
-                                value: selectedTeacher == ''
-                                    ? null
-                                    : selectedTeacher,
-                                items: List.generate(snapshot.data!.length - 1,
-                                    (index) {
-                                  return DropdownMenuItem(
-                                    value: (index + 1).toString(),
-                                    child: Text(
-                                        '${index + 1} ${snapshot.data![index + 1]}'),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedTeacher = value.toString();
-                                  });
-                                }),
-                            const SizedBox(height: 20),
-                            isLoading
-                                ? const MyCircularProgressIndicator()
-                                : ElevatedButton(
-                                    onPressed: () {
-                                      if (selectedTeacher != '') {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        final id = 'teacher-$selectedTeacher';
-                                        FirebaseAnalytics.instance
-                                            .logSelectContent(
-                                                contentType: 'select_teacher',
-                                                itemId: id);
-                                        subscribeToTopic(id)
-                                            .then((value) {
-                                              setMode('teacher');
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text('설정이 완료되었습니다.'),
-                                                ),
-                                              );
-                                            })
-                                            .then((value) => setState(() {
-                                                  isLoading = false;
-                                                }))
-                                            .then((value) =>
-                                                Get.offAllNamed('/table'));
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text('이름을 선택해주세요.'),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    child: const Text('설정하기'),
-                                  ),
-                          ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  '학생 설정하기',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(height: 60),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MyDropdownBox(
+                      width: 150,
+                      hint: '학년 선택',
+                      value: selectedGrade == '' ? null : selectedGrade,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedGrade = value!;
+                          isAvailable =
+                              selectedGrade != '' && selectedClass != '';
+                        });
+                      },
+                      items: List.generate(3, (index) => index + 1)
+                          .map((int value) {
+                        return (
+                          value: value.toString(),
+                          child: '$value학년',
                         );
-                      } else if (snapshot.hasError) {
-                        return Text("${snapshot.error}");
-                      } else {
-                        return const MyCircularProgressIndicator();
-                      }
-                    })));
+                      }),
+                    ),
+                    const SizedBox(width: 20),
+                    MyDropdownBox(
+                      width: 150,
+                      hint: '반 선택',
+                      value: selectedClass == '' ? null : selectedClass,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedClass = value!;
+                          isAvailable =
+                              selectedGrade != '' && selectedClass != '';
+                        });
+                      },
+                      items: List.generate(10, (index) => index + 1)
+                          .map((int value) {
+                        return (
+                          value: value.toString(),
+                          child: '$value반',
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: isLoading
+                        ? const MyCircularProgressIndicator()
+                        : isAvailable
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  if (selectedGrade != '' &&
+                                      selectedClass != '') {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    FirebaseAnalytics.instance.logSelectContent(
+                                      contentType: 'select_classroom',
+                                      itemId: '$selectedGrade-$selectedClass',
+                                    );
+                                    subscribeToTopic(
+                                            '$selectedGrade-$selectedClass')
+                                        .then((value) {
+                                      setMode('student')
+                                          .then((value) => setState(() {
+                                                isLoading = false;
+                                              }))
+                                          .then((value) =>
+                                              Get.offAllNamed('/table'));
+                                    });
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  minimumSize: WidgetStateProperty.all(
+                                    const Size(double.infinity, 50),
+                                  ),
+                                  shape: WidgetStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  ),
+                                  backgroundColor: WidgetStateProperty.all(
+                                      Theme.of(context).colorScheme.secondary),
+                                ),
+                                child: const Text(
+                                  '설정하기 ⚙',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
+                              )
+                            : Container(
+                                width: double.infinity,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.black45,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  '학년과 반을 선택해주세요!',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
+                              ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
