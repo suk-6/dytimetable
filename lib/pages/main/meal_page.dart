@@ -135,7 +135,7 @@ class _MealPageState extends State<MealPage> {
                                         style: const TextStyle(
                                             fontSize: 18,
                                             fontFamily: "Pretendard",
-                                            fontWeight: FontWeight.w300),
+                                            fontWeight: FontWeight.w400),
                                       ),
                                     ),
                                     Container(
