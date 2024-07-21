@@ -10,7 +10,6 @@ import 'package:dytimetable/utils/tools.dart';
 import 'package:dytimetable/widgets/circular_indicator_widget.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 // ignore: must_be_immutable
 class TablePage extends StatefulWidget {
@@ -31,37 +30,25 @@ class _TablePageState extends State<TablePage> {
 
   @override
   void initState() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      final snackBar = SnackBar(
-          content: Text(
-              "${message.notification!.title!}\n${message.notification!.body!}"));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    });
-
-    migrateData().then((value) {
-      getMode().then((value) {
-        setState(() {
-          mode = value;
-          debugPrint(mode);
-          if (mode == null) {
-            Get.offAllNamed('/onboarding');
-          } else if (mode == 'student') {
-            getClassroom().then((String? classroomData) {
-              setState(() {
-                grade = classroomData?.split('-')[0];
-                classroom = classroomData?.split('-')[1];
-                timetableData = getTimeTableData(classroomData);
-              });
-            });
-          } else if (mode == 'teacher') {
+    getMode().then((value) {
+      setState(() {
+        mode = value;
+        if (mode == 'student') {
+          getClassroom().then((String? classroomData) {
             setState(() {
-              grade = '교사';
-              selectedTeacher =
-                  getClassroomSync().toString().replaceAll('teacher-', '');
-              timetableData = getTimeTableData('teacher-$selectedTeacher');
+              grade = classroomData?.split('-')[0];
+              classroom = classroomData?.split('-')[1];
+              timetableData = getTimeTableData(classroomData);
             });
-          }
-        });
+          });
+        } else if (mode == 'teacher') {
+          setState(() {
+            grade = '교사';
+            selectedTeacher =
+                getClassroomSync().toString().replaceAll('teacher-', '');
+            timetableData = getTimeTableData('teacher-$selectedTeacher');
+          });
+        }
       });
     });
 
