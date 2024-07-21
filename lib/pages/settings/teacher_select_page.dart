@@ -98,7 +98,7 @@ class _TeacherSelectPageState extends State<TeacherSelectPage> {
                                                       isLoading = false;
                                                     }))
                                                 .then((value) =>
-                                                    Get.offAllNamed('/table'));
+                                                    Get.offAllNamed('/'));
                                           });
                                         }
                                       },

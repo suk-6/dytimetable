@@ -184,8 +184,8 @@ class _SelectPageState extends State<SelectPage> {
                                           .then((value) => setState(() {
                                                 isLoading = false;
                                               }))
-                                          .then((value) =>
-                                              Get.offAllNamed('/table'));
+                                          .then(
+                                              (value) => Get.offAllNamed('/'));
                                     });
                                   }
                                 },
