@@ -69,7 +69,7 @@ class _SelectPageState extends State<SelectPage> {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: const Icon(Icons.compare_arrows),
+              icon: const Icon(Icons.lock_rounded),
               onPressed: () {
                 setState(() {
                   password = '';
